@@ -43,6 +43,12 @@ func calculateGap(max_idx int, min_idx int, arr []string) int64{
   return gap
 }
 
+func check_scanner_error(scanner *bufio.Scanner) {
+  if err := scanner.Err(); err != nil {
+    log.Fatal(err)
+  }
+}
+
 func processWeather(file_path string) (int64, int64) {
   m := make(map[string]int64)
 
@@ -70,12 +76,12 @@ func processWeather(file_path string) (int64, int64) {
     }
   }
 
-  if err := scanner.Err(); err != nil {
-    log.Fatal(err)
-  }
+  check_scanner_error(scanner)
 
   return m["min"], m["day"]
 }
+
+
 
 func processSoccerLeagueTable(file_path string) (interface{}, interface{}) {
   m := make(map[string]interface{})
@@ -103,9 +109,7 @@ func processSoccerLeagueTable(file_path string) (interface{}, interface{}) {
     }
   }
 
-  if err := scanner.Err(); err != nil {
-    log.Fatal(err)
-  }
+  check_scanner_error(scanner)
 
   return m["min"], m["league"]
 }
