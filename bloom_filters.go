@@ -70,17 +70,17 @@ func loseLoseHash(key string) uint{
 }
 
 func (s *BitSet) Set(i uint) {
-	if len(*s) < int(i/SIZE+1) {
-		r := make([]bits, i/SIZE+1)
-		copy(r, *s)
-		*s = r
-	}
-	(*s)[i/SIZE] |= 1 << (i % SIZE)
+  if len(*s) < int(i/SIZE+1) {
+    r := make([]bits, i/SIZE+1)
+    copy(r, *s)
+    *s = r
+  }
+  (*s)[i/SIZE] |= 1 << (i % SIZE)
 }
 
 func (s *BitSet) Clear(i uint) {
   if len(*s) >= int(i/SIZE+1) {
-   (*s)[i/SIZE] &^= 1 << (i % SIZE)
+    (*s)[i/SIZE] &^= 1 << (i % SIZE)
   }
 }
 
