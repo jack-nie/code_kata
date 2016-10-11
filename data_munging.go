@@ -81,8 +81,6 @@ func processWeather(file_path string) (int64, int64) {
   return m["min"], m["day"]
 }
 
-
-
 func processSoccerLeagueTable(file_path string) (interface{}, interface{}) {
   m := make(map[string]interface{})
 
