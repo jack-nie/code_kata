@@ -34,12 +34,12 @@ func parseIntFromStr(str string) string {
   }
 }
 
-func calculateGap(max_idx int, min_idx int, arr []string) (int64, int64){
+func calculateGap(max_idx int, min_idx int, arr []string) int64{
   max_t := parseIntFromStr(arr[max_idx])
   min_t := parseIntFromStr(arr[min_idx])
   max, _ := strconv.ParseInt(max_t, 10, 64)
   min, _ := strconv.ParseInt(min_t, 10, 64)
-  gap := int(math.Abs(float64(max - min)))
+  gap := int64(math.Abs(float64(max - min)))
   return gap
 }
 
@@ -83,7 +83,7 @@ func processSoccerLeagueTable(file_path string) (interface{}, interface{}) {
   dat, err := os.Open(file_path)
   check(err)
 
-  m["min"] = int(10000)
+  m["min"] = int64(10000)
   m["league"] = -1
 
   scanner := bufio.NewScanner(dat)
@@ -97,7 +97,7 @@ func processSoccerLeagueTable(file_path string) (interface{}, interface{}) {
 
     gap := calculateGap(6, 8, arr)
 
-    if gap < m["min"].(int) {
+    if gap < m["min"].(int64) {
       m["min"] = gap
       m["league"] = arr[1]
     }

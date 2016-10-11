@@ -19,7 +19,7 @@ func TestProcessWeather(t *testing.T) {
 
 func TestProcessSoccerLeagueTable(t *testing.T) {
   for _, c := range []struct{
-    want_one int
+    want_one int64
     want_two string
     file_path string
   } {
