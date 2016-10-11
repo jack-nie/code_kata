@@ -34,7 +34,7 @@ func parseIntFromStr(str string) string {
   }
 }
 
-func processWeather() (int64, int64) {
+func processWeather(file_path string) (int64, int64) {
 
   var gap int64
   var max int64
@@ -42,7 +42,7 @@ func processWeather() (int64, int64) {
   var day int64
   m := make(map[string]int64)
 
-  dat, err := os.Open("tmp/weather.dat")
+  dat, err := os.Open(file_path)
   check(err)
 
   scanner := bufio.NewScanner(dat)
@@ -78,10 +78,10 @@ func processWeather() (int64, int64) {
   return m["min"], m["day"]
 }
 
-func processSoccerLeagueTable() (interface{}, interface{}) {
+func processSoccerLeagueTable(file_path string) (interface{}, interface{}) {
   m := make(map[string]interface{})
 
-  dat, err := os.Open("tmp/football.dat")
+  dat, err := os.Open(file_path)
   check(err)
 
   m["min"] = int64(10000)
