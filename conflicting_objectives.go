@@ -23,9 +23,7 @@ func checkWords(file_path string) []string {
   var set Set
 
   set.set = make(map[string]bool)
-
   dat, _ := os.Open(file_path)
-
   scanner := bufio.NewScanner(dat)
 
   for scanner.Scan() {
@@ -38,7 +36,6 @@ func checkWords(file_path string) []string {
     } else if length == 6{
       arr = append(arr, word)
     }
-
   }
 
   for _, element := range arr {
@@ -51,7 +48,6 @@ func checkWords(file_path string) []string {
       }
     }
   }
-
   return result
 }
 
