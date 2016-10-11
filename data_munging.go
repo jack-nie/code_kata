@@ -1,8 +1,7 @@
-package main
+package code_kata
 
 import (
   "bufio"
-  "fmt"
   "log"
   "os"
   "strings"
@@ -115,9 +114,4 @@ func processSoccerLeagueTable() (interface{}, interface{}) {
   }
 
   return m["min"], m["league"]
-}
-
-func main() {
-  gap, league := processSoccerLeagueTable()
-  fmt.Println(gap, league)
 }
