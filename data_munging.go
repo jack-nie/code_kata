@@ -34,12 +34,16 @@ func parseIntFromStr(str string) string {
   }
 }
 
-func processWeather(file_path string) (int64, int64) {
+func calculateGap(max_idx int, min_idx int, arr []string) (int64, int64){
+  max_t := parseIntFromStr(arr[max_idx])
+  min_t := parseIntFromStr(arr[min_idx])
+  max, _ := strconv.ParseInt(max_t, 10, 64)
+  min, _ := strconv.ParseInt(min_t, 10, 64)
+  gap := int(math.Abs(float64(max - min)))
+  return gap
+}
 
-  var gap int64
-  var max int64
-  var min int64
-  var day int64
+func processWeather(file_path string) (int64, int64) {
   m := make(map[string]int64)
 
   dat, err := os.Open(file_path)
@@ -57,13 +61,8 @@ func processWeather(file_path string) (int64, int64) {
       continue
     }
 
-    max_t := parseIntFromStr(arr[1])
-    min_t := parseIntFromStr(arr[2])
-    max, _ = strconv.ParseInt(max_t, 10, 64)
-    min, _ = strconv.ParseInt(min_t, 10, 64)
-
-    gap = max - min
-    day, _ = strconv.ParseInt(arr[0], 10, 64)
+    gap := calculateGap(1,2, arr)
+    day, _ := strconv.ParseInt(arr[0], 10, 64)
 
     if gap < m["min"] {
       m["min"] = gap
@@ -84,7 +83,7 @@ func processSoccerLeagueTable(file_path string) (interface{}, interface{}) {
   dat, err := os.Open(file_path)
   check(err)
 
-  m["min"] = int64(10000)
+  m["min"] = int(10000)
   m["league"] = -1
 
   scanner := bufio.NewScanner(dat)
@@ -96,14 +95,9 @@ func processSoccerLeagueTable(file_path string) (interface{}, interface{}) {
       continue
     }
 
-    for_t := parseIntFromStr(arr[6])
-    against_t := parseIntFromStr(arr[8])
-    for_score, _ := strconv.ParseInt(for_t, 10, 64)
-    against_score, _ := strconv.ParseInt(against_t, 10, 64)
+    gap := calculateGap(6, 8, arr)
 
-    gap := int64(math.Abs(float64(for_score - against_score)))
-
-    if gap < m["min"].(int64) {
+    if gap < m["min"].(int) {
       m["min"] = gap
       m["league"] = arr[1]
     }
