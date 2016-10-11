@@ -1,12 +1,14 @@
-package code_kata
+package main
 
 import (
   "bufio"
+  "fmt"
   "log"
   "os"
   "strings"
   "strconv"
   "unicode"
+  "math"
 )
 
 func check(err error) {
@@ -33,7 +35,7 @@ func parseIntFromStr(str string) string {
   }
 }
 
-func processFile() (int64, int64) {
+func processWeather() (int64, int64) {
 
   var gap int64
   var max int64
@@ -75,4 +77,47 @@ func processFile() (int64, int64) {
   }
 
   return m["min"], m["day"]
+}
+
+func processSoccerLeagueTable() (interface{}, interface{}) {
+  m := make(map[string]interface{})
+
+  dat, err := os.Open("tmp/football.dat")
+  check(err)
+
+  m["min"] = int64(10000)
+  m["league"] = -1
+
+  scanner := bufio.NewScanner(dat)
+
+  for scanner.Scan() {
+    arr := strings.Fields(scanner.Text())
+
+    if len(arr) == 0 || !strings.Contains(arr[0], ".") {
+      continue
+    }
+
+    for_t := parseIntFromStr(arr[6])
+    against_t := parseIntFromStr(arr[8])
+    for_score, _ := strconv.ParseInt(for_t, 10, 64)
+    against_score, _ := strconv.ParseInt(against_t, 10, 64)
+
+    gap := int64(math.Abs(float64(for_score - against_score)))
+
+    if gap < m["min"].(int64) {
+      m["min"] = gap
+      m["league"] = arr[1]
+    }
+  }
+
+  if err := scanner.Err(); err != nil {
+    log.Fatal(err)
+  }
+
+  return m["min"], m["league"]
+}
+
+func main() {
+  gap, league := processSoccerLeagueTable()
+  fmt.Println(gap, league)
 }
