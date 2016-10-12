@@ -26,7 +26,7 @@ func TestCalculateTotalPrice(t *testing.T) {
 		item      []string
 		file_path string
 	}{
-		{12, []string{"A", "A", "A", "A", "B", "C", "D"}, "tmp/pricing_rules.txt"},
+		{245, []string{"A", "A", "A", "A", "B", "C", "D"}, "tmp/pricing_rules.txt"},
 	} {
 		got := calculateTotalPrice(c.item, c.file_path)
 		if got != c.want {

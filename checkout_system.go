@@ -65,7 +65,7 @@ func analyzePricingRules(file_path string) map[string]Rule {
 	return rule
 }
 
-func (item Item) isSpecialRuleMeeted(rule map[string]Rule) bool {
+func (item *Item) isSpecialRuleMeeted(rule map[string]Rule) bool {
 	specialRule := rule[item.name].specialRule
 	if &specialRule != nil {
 		return item.quantity >= specialRule.quantity
@@ -73,19 +73,21 @@ func (item Item) isSpecialRuleMeeted(rule map[string]Rule) bool {
 	return false
 }
 
-func addToCart(item_name string, cart map[string]Item) bool {
-	item := cart[item_name]
-	if &item != nil {
+func addToCart(item_name string, cart *map[string]Item) bool {
+
+	item := (*cart)[item_name]
+	if item.quantity != 0 {
 		item.quantity += 1
+		(*cart)[item_name] = item
 	} else {
 		item.name = item_name
 		item.quantity = 1
-		cart[item_name] = item
+		(*cart)[item_name] = item
 	}
 	return true
 }
 
-func (item Item) calculateSpecialPrice(rule map[string]Rule) int {
+func (item *Item) calculateSpecialPrice(rule map[string]Rule) int {
 	var sum int
 	var specialCouples int
 	var remainQuantity int
@@ -106,9 +108,10 @@ func calculateTotalPrice(item_names []string, file_path string) int {
 	var sum int
 	sum = 0
 	rule := analyzePricingRules(file_path)
+	cart = make(map[string]Item)
 
 	for _, item := range item_names {
-		addToCart(item, cart)
+		addToCart(item, &cart)
 	}
 
 	for _, value := range cart {
