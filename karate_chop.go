@@ -7,7 +7,7 @@ func chop(target int, arr []int) int {
 	left = 0
 	right = len(arr) - 1
 
-	mid = left + (right-left)>>2
+	mid = left + (right-left)>>1
 
 	for left <= right {
 		if arr[mid] < target {
