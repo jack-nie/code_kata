@@ -30,11 +30,12 @@ func (list *SingleLinkedList) find(value string) Node {
 	var node Node
 	l := list.head
 	for {
-		if l.value == value {
+		if l == nil {
+			return node
+		} else if l.value == value {
 			return *l
-		} else {
-			l = l.next
 		}
+		l = l.next
 	}
 	return node
 }
