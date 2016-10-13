@@ -2,16 +2,16 @@ package simple_lists
 
 type SingleLinkedList struct {
 	head, tail *Node
-	length int
+	length     int
 }
 
 type Node struct {
 	value string
-	next *Node
+	next  *Node
 }
 
 func (list *SingleLinkedList) add(node *Node) {
-	if list.head == nil{
+	if list.head == nil {
 		list.head = node
 		list.tail = node
 	} else if list.head == list.tail {
@@ -22,4 +22,16 @@ func (list *SingleLinkedList) add(node *Node) {
 		list.tail = node
 	}
 	list.length++
+}
+
+func (list *SingleLinkedList) find(value string) string {
+	l := list.head
+	for {
+		if l.value == value {
+			return l.value
+		} else {
+			l = l.next
+		}
+	}
+	return "not found"
 }
