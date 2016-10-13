@@ -4,11 +4,11 @@ import "testing"
 
 func TestJoaatHash(t *testing.T) {
 	for _, c := range []struct {
-		want uint
-		key  string
+		want uint64
+		key  []byte
 	}{
-		{8847632551651054667, "hello"},
-		{1758146220456233818, "word"},
+		{8847632551651054667, []byte("hello")},
+		{409105252719273154, []byte("world!")},
 	} {
 		got := joaatHash(c.key)
 
@@ -20,11 +20,11 @@ func TestJoaatHash(t *testing.T) {
 
 func TestDjb2Hash(t *testing.T) {
 	for _, c := range []struct {
-		want uint
-		key  string
+		want uint64
+		key  []byte
 	}{
-		{210714636441, "hello"},
-		{6385842145, "word"},
+		{210714636441, []byte("hello")},
+		{6954182107950, []byte("world!")},
 	} {
 		got := djb2Hash(c.key)
 
@@ -36,11 +36,11 @@ func TestDjb2Hash(t *testing.T) {
 
 func TestSdbmHash(t *testing.T) {
 	for _, c := range []struct {
-		want uint
-		key  string
+		want uint64
+		key  []byte
 	}{
-		{27263685106, "hello"},
-		{245562474, "word"},
+		{27263685106, []byte("hello")},
+		{3960677284911, []byte("world!")},
 	} {
 		got := sdbmHash(c.key)
 
@@ -52,11 +52,11 @@ func TestSdbmHash(t *testing.T) {
 
 func TestLoseLoseHash(t *testing.T) {
 	for _, c := range []struct {
-		want uint
-		key  string
+		want uint64
+		key  []byte
 	}{
-		{532, "hello"},
-		{444, "word"},
+		{532, []byte("hello")},
+		{585, []byte("world!")},
 	} {
 		got := loseLoseHash(c.key)
 
@@ -66,7 +66,7 @@ func TestLoseLoseHash(t *testing.T) {
 	}
 }
 
-func TestBloomFilters(t *testing.T) {
+func TestStringBloomFilters(t *testing.T) {
 	for _, c := range []struct {
 		want      bool
 		file_path string
@@ -76,7 +76,7 @@ func TestBloomFilters(t *testing.T) {
 		{true, "tmp/wordlist.txt", "world"},
 		{true, "tmp/wordlist.txt", "say"},
 	} {
-		got := bloomFilters(c.file_path, c.target)
+		got := stringBloomFilters(c.file_path, c.target)
 
 		if got != c.want {
 			t.Errorf("test failed, expected %s, got %s", c.want, got)

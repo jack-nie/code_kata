@@ -2,20 +2,25 @@ package code_kata
 
 import (
 	"bufio"
-	"fmt"
 	"github.com/willf/bitset"
 	"os"
 )
 
-func joaatHash(key string) uint {
-	var hash uint
+type BloomFilter struct {
+	m uint
+	k uint
+	b *bitset.BitSet
+}
+
+func joaatHash(key []byte) uint64 {
+	var hash uint64
 	var i, key_len int
 
 	key_len = len(key)
 	hash = 0
 
 	for i = 0; i < key_len; i++ {
-		hash += uint(key[i])
+		hash += uint64(key[i])
 		hash += (hash << 10)
 		hash ^= (hash >> 6)
 	}
@@ -26,68 +31,81 @@ func joaatHash(key string) uint {
 	return hash
 }
 
-func djb2Hash(key string) uint {
-	var hash uint
+func djb2Hash(key []byte) uint64 {
+	var hash uint64
 	var i, key_len int
 
 	key_len = len(key)
 	hash = 5381
 
 	for i = 0; i < key_len; i++ {
-		hash = ((hash << 5) + hash) + uint(key[i])
+		hash = ((hash << 5) + hash) + uint64(key[i])
 	}
 
 	return hash
 }
 
-func sdbmHash(key string) uint {
-	var hash uint
+func sdbmHash(key []byte) uint64 {
+	var hash uint64
 	var i, key_len int
 
 	key_len = len(key)
 
 	for i = 0; i < key_len; i++ {
-		hash = uint(key[i]) + (hash << 6) + (hash << 6) - hash
+		hash = uint64(key[i]) + (hash << 6) + (hash << 6) - hash
 	}
 
 	return hash
 }
 
-func loseLoseHash(key string) uint {
-	var hash uint
+func loseLoseHash(key []byte) uint64 {
+	var hash uint64
 	var i, key_len int
 
 	key_len = len(key)
 
 	for i = 0; i < key_len; i++ {
-		hash += uint(key[i])
+		hash += uint64(key[i])
 	}
 
 	return hash
 }
 
-func add(value string, s *bitset.BitSet) {
-	//s.Set(joaatHash(value))
-	//s.Set()
-	//s.Set(sdbmHash())
-	fmt.Println(joaatHash(value))
-	fmt.Println(djb2Hash(value))
-	fmt.Println(sdbmHash(value))
-	s.Set(loseLoseHash(value))
+func baseHashes(data []byte) [4]uint64 {
+	return [4]uint64{
+		joaatHash(data),
+		djb2Hash(data),
+		sdbmHash(data),
+		loseLoseHash(data),
+	}
 }
 
-func bloomFilters(file_path string, target string) bool {
-	s := new(bitset.BitSet)
+func add(data []byte, s *bitset.BitSet) {
+	h := baseHashes(data)
+	for i := uint(0); i < 4; i++ {
+		s.Set(uint(h[i]))
+	}
+}
+
+func byteBloomFilters(file_path string, target []byte) bool {
+	s := bitset.New(2 << 32)
 	dat, _ := os.Open(file_path)
 	scanner := bufio.NewScanner(dat)
 
 	for scanner.Scan() {
 		word := scanner.Text()
-		add(word, s)
+		add([]byte(word), s)
 	}
-	a := joaatHash(target)
-	b := djb2Hash(target)
-	c := sdbmHash(target)
-	d := loseLoseHash(target)
-	return s.Test(a) && s.Test(b) && s.Test(c) && s.Test(d)
+
+	h := baseHashes(target)
+	for i := uint(0); i < 4; i++ {
+		if !s.Test(uint(h[i])) {
+			return false
+		}
+	}
+	return true
+}
+
+func stringBloomFilters(file_path string, target string) bool {
+	return byteBloomFilters(file_path, []byte(target))
 }
