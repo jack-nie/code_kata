@@ -24,14 +24,15 @@ func (list *SingleLinkedList) add(node *Node) {
 	list.length++
 }
 
-func (list *SingleLinkedList) find(value string) string {
+func (list *SingleLinkedList) find(value string) Node {
+	var node Node
 	l := list.head
 	for {
 		if l.value == value {
-			return l.value
+			return *l
 		} else {
 			l = l.next
 		}
 	}
-	return "not found"
+	return node
 }

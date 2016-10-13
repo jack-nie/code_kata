@@ -30,9 +30,9 @@ func TestFind(t *testing.T) {
 		{"hello", node},
 	} {
 		list.add(&node)
-		value := list.find("hello")
-		if value != c.want {
-			t.Errorf("test failed, expected %s, got %s", c.want, value)
+		node := list.find("hello")
+		if node.value != c.want {
+			t.Errorf("test failed, expected %s, got %s", c.want, node.value)
 		}
 	}
 }
