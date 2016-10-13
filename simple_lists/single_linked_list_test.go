@@ -1,18 +1,19 @@
 package simple_lists
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 func TestAdd(t *testing.T) {
-	var node Node
 	var list SingleLinkedList
-	node.value = "hello"
 	for _, c := range []struct {
-		want string
-		node Node
+		want  string
+		value string
 	}{
-		{"hello", node},
+		{"hello", "hello"},
 	} {
-		list.add(&node)
+		list.add(c.value)
 		if list.head.value != c.want || list.tail.value != c.want {
 			t.Errorf("test failed, expected %s, got %s, %s", c.want, list.head.value, list.tail.value)
 		}
@@ -20,19 +21,35 @@ func TestAdd(t *testing.T) {
 }
 
 func TestFind(t *testing.T) {
-	var node Node
 	var list SingleLinkedList
-	node.value = "hello"
 	for _, c := range []struct {
-		want string
-		node Node
+		want  string
+		value string
 	}{
-		{"hello", node},
+		{"hello", "hello"},
+		{"world", "world"},
+		{"!", "!"},
 	} {
-		list.add(&node)
-		node := list.find("hello")
+		list.add(c.value)
+		node := list.find(c.value)
 		if node.value != c.want {
 			t.Errorf("test failed, expected %s, got %s", c.want, node.value)
+		}
+	}
+}
+
+func TestValues(t *testing.T) {
+	var list SingleLinkedList
+	for _, c := range []struct {
+		want []string
+	}{
+		{[]string{"hello", "world"}},
+	} {
+		list.add("hello")
+		list.add("world")
+		got := list.values()
+		if !reflect.DeepEqual(got, c.want) {
+			t.Errorf("test failed, expected %s, got %s", c.want, got)
 		}
 	}
 }
