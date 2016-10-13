@@ -6,12 +6,6 @@ import (
 	"os"
 )
 
-type BloomFilter struct {
-	m uint
-	k uint
-	b *bitset.BitSet
-}
-
 func joaatHash(key []byte) uint64 {
 	var hash uint64
 	var i, key_len int
