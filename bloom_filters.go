@@ -2,13 +2,10 @@ package code_kata
 
 import (
 	"bufio"
+	"fmt"
+	"github.com/willf/bitset"
 	"os"
 )
-
-const SIZE = 2 << 25
-
-type bits uint64
-type BitSet []bits
 
 func joaatHash(key string) uint {
 	var hash uint
@@ -69,49 +66,28 @@ func loseLoseHash(key string) uint {
 	return hash
 }
 
-func (s *BitSet) Set(i uint) {
-	if len(*s) < int(i/SIZE+1) {
-		r := make([]bits, i/SIZE+1)
-		copy(r, *s)
-		*s = r
-	}
-	(*s)[i/SIZE] |= 1 << (i % SIZE)
-}
-
-func (s *BitSet) Clear(i uint) {
-	if len(*s) >= int(i/SIZE+1) {
-		(*s)[i/SIZE] &^= 1 << (i % SIZE)
-	}
-}
-
-func (s *BitSet) IsSet(i uint) bool {
-	return (*s)[i/SIZE]&(1<<(i%SIZE)) != 0
-}
-
-func (s *BitSet) add(value string) {
-	s.Set(joaatHash(value))
-	s.Set(djb2Hash(value))
-	s.Set(sdbmHash(value))
+func add(value string, s *bitset.BitSet) {
+	//s.Set(joaatHash(value))
+	//s.Set()
+	//s.Set(sdbmHash())
+	fmt.Println(joaatHash(value))
+	fmt.Println(djb2Hash(value))
+	fmt.Println(sdbmHash(value))
 	s.Set(loseLoseHash(value))
 }
 
-func (s *BitSet) contains(value string) bool {
-	return s.IsSet(joaatHash(value)) &&
-		s.IsSet(djb2Hash(value)) &&
-		s.IsSet(sdbmHash(value)) &&
-		s.IsSet(loseLoseHash(value))
-
-}
-
 func bloomFilters(file_path string, target string) bool {
-	s := new(BitSet)
+	s := new(bitset.BitSet)
 	dat, _ := os.Open(file_path)
 	scanner := bufio.NewScanner(dat)
 
 	for scanner.Scan() {
 		word := scanner.Text()
-		s.add(word)
+		add(word, s)
 	}
-
-	return s.contains(target)
+	a := joaatHash(target)
+	b := djb2Hash(target)
+	c := sdbmHash(target)
+	d := loseLoseHash(target)
+	return s.Test(a) && s.Test(b) && s.Test(c) && s.Test(d)
 }
