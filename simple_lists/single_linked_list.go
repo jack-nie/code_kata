@@ -53,3 +53,23 @@ func (list *SingleLinkedList) values() []string {
 	}
 	return values
 }
+
+func (list *SingleLinkedList) isLast(node *Node) bool {
+	if node == nil {
+		return true
+	}
+	return false
+}
+
+func (list *SingleLinkedList) findPrevious(value string) *Node {
+	head := list.head
+	for head.next != nil && head.next.value != value {
+		head = head.next
+	}
+
+	if head.next == nil {
+		return head.next
+	}
+
+	return head
+}

@@ -53,3 +53,42 @@ func TestValues(t *testing.T) {
 		}
 	}
 }
+
+func TestIsLast(t *testing.T) {
+	var list SingleLinkedList
+	list.add("world")
+	list.add("hello")
+	for _, c := range []struct {
+		want bool
+		head *Node
+	}{
+		{false, list.head},
+		{false, list.head.next},
+		{true, list.head.next.next},
+	} {
+		got := list.isLast(c.head)
+		if !reflect.DeepEqual(got, c.want) {
+			t.Errorf("test failed, expected %s, got %s", c.want, got)
+		}
+	}
+}
+
+func TestFindPrevious(t *testing.T) {
+	var list SingleLinkedList
+	list.add("world")
+	list.add("hello")
+	list.add("google")
+	for _, c := range []struct {
+		want  string
+		value string
+	}{
+		{"world", "hello"},
+		{"hello", "google"},
+	} {
+		got := list.findPrevious(c.value)
+
+		if got != nil && got.value != c.want {
+			t.Errorf("test failed, expected %s, got %s", c.want, got.value)
+		}
+	}
+}
