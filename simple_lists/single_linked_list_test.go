@@ -92,3 +92,23 @@ func TestFindPrevious(t *testing.T) {
 		}
 	}
 }
+
+func TestDelete(t *testing.T) {
+	var list SingleLinkedList
+	list.add("world")
+	list.add("hello")
+	list.add("google")
+	for _, c := range []struct {
+		want  []string
+		value string
+	}{
+		{[]string{"world", "google"}, "hello"},
+	} {
+		list.delete(list.find(c.value))
+		got := list.values()
+
+		if !reflect.DeepEqual(got, c.want) {
+			t.Errorf("test failed, expected %s, got %s", c.want, got)
+		}
+	}
+}

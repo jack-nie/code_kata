@@ -61,6 +61,21 @@ func (list *SingleLinkedList) isLast(node *Node) bool {
 	return false
 }
 
+func (list *SingleLinkedList) delete(node Node) {
+	prev := list.findPrevious(node.value)
+	head := list.head
+	var nilNode *Node
+	for !list.isLast(head) && head != prev {
+		head = head.next
+	}
+
+	if head.next != nil {
+		head.next = head.next.next
+	} else {
+		head.next = nilNode
+	}
+}
+
 func (list *SingleLinkedList) findPrevious(value string) *Node {
 	head := list.head
 	for head.next != nil && head.next.value != value {
