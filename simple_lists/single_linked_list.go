@@ -27,17 +27,11 @@ func (list *SingleLinkedList) add(value string) {
 }
 
 func (list *SingleLinkedList) find(value string) Node {
-	var node Node
 	l := list.head
-	for {
-		if l == nil {
-			return node
-		} else if l.value == value {
-			return *l
-		}
+	for l != nil && l.value != value {
 		l = l.next
 	}
-	return node
+	return *l
 }
 
 func (list *SingleLinkedList) values() []string {
