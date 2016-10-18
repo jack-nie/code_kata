@@ -4,5 +4,7 @@ import "testing"
 
 func TestCheckWorlds(t *testing.T) {
 	s := checkWords("tmp/wordlist.txt")
-	t.Errorf("test result: ", s)
+	if len(s) == 0 {
+		t.Errorf("test failed: ", s)
+	}
 }

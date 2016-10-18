@@ -2,19 +2,19 @@ package code_kata
 
 import (
 	"bufio"
-	"github.com/willf/bitset"
 	"os"
+	"xojoc.pw/bitset"
 )
 
-func joaatHash(key []byte) uint64 {
-	var hash uint64
+func joaatHash(key []byte) uint {
+	var hash uint
 	var i, key_len int
 
 	key_len = len(key)
 	hash = 0
 
 	for i = 0; i < key_len; i++ {
-		hash += uint64(key[i])
+		hash += uint(key[i])
 		hash += (hash << 10)
 		hash ^= (hash >> 6)
 	}
@@ -25,48 +25,48 @@ func joaatHash(key []byte) uint64 {
 	return hash
 }
 
-func djb2Hash(key []byte) uint64 {
-	var hash uint64
+func djb2Hash(key []byte) uint {
+	var hash uint
 	var i, key_len int
 
 	key_len = len(key)
 	hash = 5381
 
 	for i = 0; i < key_len; i++ {
-		hash = ((hash << 5) + hash) + uint64(key[i])
+		hash = ((hash << 5) + hash) + uint(key[i])
 	}
 
 	return hash
 }
 
-func sdbmHash(key []byte) uint64 {
-	var hash uint64
+func sdbmHash(key []byte) uint {
+	var hash uint
 	var i, key_len int
 
 	key_len = len(key)
 
 	for i = 0; i < key_len; i++ {
-		hash = uint64(key[i]) + (hash << 6) + (hash << 6) - hash
+		hash = uint(key[i]) + (hash << 6) + (hash << 6) - hash
 	}
 
 	return hash
 }
 
-func loseLoseHash(key []byte) uint64 {
-	var hash uint64
+func loseLoseHash(key []byte) uint {
+	var hash uint
 	var i, key_len int
 
 	key_len = len(key)
 
 	for i = 0; i < key_len; i++ {
-		hash += uint64(key[i])
+		hash += uint(key[i])
 	}
 
 	return hash
 }
 
-func baseHashes(data []byte) [4]uint64 {
-	return [4]uint64{
+func baseHashes(data []byte) [4]uint {
+	return [4]uint{
 		joaatHash(data),
 		djb2Hash(data),
 		sdbmHash(data),

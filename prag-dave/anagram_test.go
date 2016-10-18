@@ -5,6 +5,8 @@ import "testing"
 func TestAnagramDict(t *testing.T) {
 	str := anagramsDict("tmp/wordlist.txt")
 	for _, value := range str {
-		t.Errorf(value.String())
+		if len(value.String()) == 0 {
+			t.Errorf("test failed: ", value.String())
+		}
 	}
 }
