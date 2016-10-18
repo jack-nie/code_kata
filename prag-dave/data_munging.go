@@ -10,17 +10,6 @@ import (
 	"unicode"
 )
 
-func check(err error) {
-	if err != nil {
-		log.Fatal(err)
-	}
-}
-
-func isNotNumeric(str string) bool {
-	_, err := strconv.ParseInt(str, 10, 64)
-	return err != nil
-}
-
 func parseIntFromStr(str string) string {
 	f := func(c rune) bool {
 		return !unicode.IsNumber(c) && (c != 46)
