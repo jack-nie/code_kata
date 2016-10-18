@@ -3,6 +3,7 @@ package code_kata
 import (
 	"bufio"
 	"container/list"
+	"log"
 	"os"
 )
 
@@ -22,6 +23,9 @@ func (q *Queue) Enqueue(v interface{}) {
 
 func (q *Queue) Dequeue() interface{} {
 	iter := q.data.Front()
+	if iter == nil {
+		return nil
+	}
 	v := iter.Value
 	q.data.Remove(iter)
 	return v
@@ -42,12 +46,14 @@ func (graph *WordGraph) findShortestPath(fromWord string, toWord string) *list.L
 	q := NewQueue()
 	q.Enqueue(fromWord)
 
-	for word := q.Dequeue().(string); word != toWord && q.data.Len() != 0; word = q.Dequeue().(string) {
-		nextWords := graph.getNextWords(word)
+	for word := q.Dequeue(); q != nil && word != toWord; word = q.Dequeue() {
+		innerWord := word.(string)
+		nextWords := graph.getNextWords(innerWord)
 		for nextWord := nextWords.Front(); nextWord != nil; nextWord = nextWord.Next() {
 			val := nextWord.Value.(string)
 			if _, ok := previous[val]; ok {
-				previous[val] = word
+				previous[val] = innerWord
+				log.Print(innerWord)
 				q.data.PushBack(val)
 			}
 		}
@@ -56,10 +62,10 @@ func (graph *WordGraph) findShortestPath(fromWord string, toWord string) *list.L
 }
 
 func (graph *WordGraph) getNextWords(word string) *list.List {
-	var nextWords *list.List
+	nextWords := list.New()
 	for currWord := graph.wordList.Front(); currWord != nil; currWord = currWord.Next() {
 		if graph.getWordDiff(word, currWord.Value.(string)) == 1 {
-			nextWords.PushBack(currWord)
+			nextWords.PushBack(currWord.Value.(string))
 		}
 
 	}
@@ -79,8 +85,10 @@ func (graph *WordGraph) getWordDiff(word1 string, word2 string) int {
 
 func (graph *WordGraph) getPath(previous map[string]string, fromWord string, toWord string) *list.List {
 	path := list.New()
-	if _, ok := previous[toWord]; ok {
-		return path
+	log.Print("#####", previous[toWord])
+	if _, ok := previous[toWord]; !ok {
+		log.Print("---")
+		return nil
 	}
 
 	word := toWord
