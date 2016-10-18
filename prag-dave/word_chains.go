@@ -31,9 +31,12 @@ type WordGraph struct {
 	wordList *list.List
 }
 
+func NewWordGraph() *WordGraph {
+	return &WordGraph{}
+}
+
 func (graph *WordGraph) findShortestPath(fromWord string, toWord string) *list.List {
 	var previous map[string]string
-	var word string
 	previous = make(map[string]string)
 
 	q := NewQueue()
