@@ -66,20 +66,20 @@ func TestLoseLoseHash(t *testing.T) {
 	}
 }
 
-func TestStringBloomFilters(t *testing.T) {
-	for _, c := range []struct {
-		want      bool
-		file_path string
-		target    string
-	}{
-		{true, "tmp/wordlist.txt", "hello"},
-		{true, "tmp/wordlist.txt", "world"},
-		{true, "tmp/wordlist.txt", "say"},
-	} {
-		got := stringBloomFilters(c.file_path, c.target)
-
-		if got != c.want {
-			t.Errorf("test failed, expected %s, got %s", c.want, got)
-		}
-	}
-}
+//func TestStringBloomFilters(t *testing.T) {
+//	for _, c := range []struct {
+//		want      bool
+//		file_path string
+//		target    string
+//	}{
+//		{true, "tmp/wordlist.txt", "hello"},
+//		{true, "tmp/wordlist.txt", "world"},
+//		{true, "tmp/wordlist.txt", "say"},
+//	} {
+//		got := stringBloomFilters(c.file_path, c.target)
+//
+//		if got != c.want {
+//			t.Errorf("test failed, expected %s, got %s", c.want, got)
+//		}
+//	}
+//}

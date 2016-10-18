@@ -10,7 +10,7 @@ func checkWords(file_path string) []string {
 	var arr []string
 	var result []string
 	var length int
-	var set set.Set
+	set := set.New()
 
 	dat, _ := os.Open(file_path)
 	scanner := bufio.NewScanner(dat)
