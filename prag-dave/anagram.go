@@ -3,8 +3,8 @@ package code_kata
 import (
 	"bufio"
 	"github.com/fatih/set"
+	"log"
 	"os"
-	"strings"
 	"sort"
 )
 
@@ -28,13 +28,13 @@ func SortString(s string) string {
 	return string(r)
 }
 
-func anagramsDict(file_path string) map[string]set.Set {
-	var dict map[string]set.Set
-	dict = make(map[string]set.Set)
+func anagramsDict(file_path string) map[string]*set.Set {
+	var dict map[string]*set.Set
+	dict = make(map[string]*set.Set)
 
-  dat, err := os.Open(file_path)
+	dat, err := os.Open(file_path)
 
-	if err := nil {
+	if err != nil {
 		log.Fatal("File read failed: ", err)
 	}
 
@@ -43,7 +43,11 @@ func anagramsDict(file_path string) map[string]set.Set {
 	for scanner.Scan() {
 		orig := scanner.Text()
 		str := SortString(orig)
-		dict[str].add(orig)
+		if dict[str] == nil {
+			dict[str] = set.New(orig)
+		} else {
+			dict[str].Add(orig)
+		}
 	}
 
 	return dict
