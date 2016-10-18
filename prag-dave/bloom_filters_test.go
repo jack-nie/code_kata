@@ -4,7 +4,7 @@ import "testing"
 
 func TestJoaatHash(t *testing.T) {
 	for _, c := range []struct {
-		want uint
+		want int
 		key  []byte
 	}{
 		{8847632551651054667, []byte("hello")},
@@ -20,7 +20,7 @@ func TestJoaatHash(t *testing.T) {
 
 func TestDjb2Hash(t *testing.T) {
 	for _, c := range []struct {
-		want uint
+		want int
 		key  []byte
 	}{
 		{210714636441, []byte("hello")},
@@ -36,7 +36,7 @@ func TestDjb2Hash(t *testing.T) {
 
 func TestSdbmHash(t *testing.T) {
 	for _, c := range []struct {
-		want uint
+		want int
 		key  []byte
 	}{
 		{27263685106, []byte("hello")},
@@ -52,7 +52,7 @@ func TestSdbmHash(t *testing.T) {
 
 func TestLoseLoseHash(t *testing.T) {
 	for _, c := range []struct {
-		want uint
+		want int
 		key  []byte
 	}{
 		{532, []byte("hello")},

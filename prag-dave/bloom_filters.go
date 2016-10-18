@@ -6,15 +6,15 @@ import (
 	"xojoc.pw/bitset"
 )
 
-func joaatHash(key []byte) uint {
-	var hash uint
+func joaatHash(key []byte) int {
+	var hash int
 	var i, key_len int
 
 	key_len = len(key)
 	hash = 0
 
 	for i = 0; i < key_len; i++ {
-		hash += uint(key[i])
+		hash += int(key[i])
 		hash += (hash << 10)
 		hash ^= (hash >> 6)
 	}
@@ -25,48 +25,48 @@ func joaatHash(key []byte) uint {
 	return hash
 }
 
-func djb2Hash(key []byte) uint {
-	var hash uint
+func djb2Hash(key []byte) int {
+	var hash int
 	var i, key_len int
 
 	key_len = len(key)
 	hash = 5381
 
 	for i = 0; i < key_len; i++ {
-		hash = ((hash << 5) + hash) + uint(key[i])
+		hash = ((hash << 5) + hash) + int(key[i])
 	}
 
 	return hash
 }
 
-func sdbmHash(key []byte) uint {
-	var hash uint
+func sdbmHash(key []byte) int {
+	var hash int
 	var i, key_len int
 
 	key_len = len(key)
 
 	for i = 0; i < key_len; i++ {
-		hash = uint(key[i]) + (hash << 6) + (hash << 6) - hash
+		hash = int(key[i]) + (hash << 6) + (hash << 6) - hash
 	}
 
 	return hash
 }
 
-func loseLoseHash(key []byte) uint {
-	var hash uint
+func loseLoseHash(key []byte) int {
+	var hash int
 	var i, key_len int
 
 	key_len = len(key)
 
 	for i = 0; i < key_len; i++ {
-		hash += uint(key[i])
+		hash += int(key[i])
 	}
 
 	return hash
 }
 
-func baseHashes(data []byte) [4]uint {
-	return [4]uint{
+func baseHashes(data []byte) [4]int {
+	return [4]int{
 		joaatHash(data),
 		djb2Hash(data),
 		sdbmHash(data),
@@ -76,13 +76,13 @@ func baseHashes(data []byte) [4]uint {
 
 func add(data []byte, s *bitset.BitSet) {
 	h := baseHashes(data)
-	for i := uint(0); i < 4; i++ {
-		s.Set(uint(h[i]))
+	for i := int(0); i < 4; i++ {
+		s.Set(h[i])
 	}
 }
 
 func byteBloomFilters(file_path string, target []byte) bool {
-	s := bitset.New(2 << 32)
+	s := &bitset.BitSet{}
 	dat, _ := os.Open(file_path)
 	scanner := bufio.NewScanner(dat)
 
@@ -92,8 +92,8 @@ func byteBloomFilters(file_path string, target []byte) bool {
 	}
 
 	h := baseHashes(target)
-	for i := uint(0); i < 4; i++ {
-		if !s.Test(uint(h[i])) {
+	for i := int(0); i < 4; i++ {
+		if !s.Get(int(h[i])) {
 			return false
 		}
 	}
