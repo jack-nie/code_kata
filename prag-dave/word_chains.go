@@ -3,7 +3,6 @@ package code_kata
 import (
 	"bufio"
 	"container/list"
-	"log"
 	"os"
 )
 
@@ -53,7 +52,6 @@ func (graph *WordGraph) findShortestPath(fromWord string, toWord string) *list.L
 			val := nextWord.Value.(string)
 			if _, ok := previous[val]; ok {
 				previous[val] = innerWord
-				log.Print(innerWord)
 				q.data.PushBack(val)
 			}
 		}
@@ -85,9 +83,7 @@ func (graph *WordGraph) getWordDiff(word1 string, word2 string) int {
 
 func (graph *WordGraph) getPath(previous map[string]string, fromWord string, toWord string) *list.List {
 	path := list.New()
-	log.Print("#####", previous[toWord])
 	if _, ok := previous[toWord]; !ok {
-		log.Print("---")
 		return nil
 	}
 
