@@ -45,12 +45,20 @@ func (graph *WordGraph) findShortestPath(fromWord string, toWord string) *list.L
 	q := NewQueue()
 	q.Enqueue(fromWord)
 
-	for word := q.Dequeue(); q != nil && word != toWord; word = q.Dequeue() {
-		innerWord := word.(string)
+	for word := q.Dequeue(); word != nil && word != toWord; word = q.Dequeue() {
+		var innerWord string
+		switch word.(type) {
+		case string:
+			innerWord = word.(string)
+		default:
+			innerWord = " "
+			continue
+		}
+
 		nextWords := graph.getNextWords(innerWord)
 		for nextWord := nextWords.Front(); nextWord != nil; nextWord = nextWord.Next() {
 			val := nextWord.Value.(string)
-			if _, ok := previous[val]; ok {
+			if _, ok := previous[val]; !ok {
 				previous[val] = innerWord
 				q.data.PushBack(val)
 			}
