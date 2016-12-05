@@ -26,8 +26,15 @@ func isKaprekarNumber(arg string) bool {
 	str := fmt.Sprintf("%d", square)
 	var length int = len(str)
 	for i := 0; i < length; i++ {
-		num1, _ := strconv.Atoi(str[0:i])
-		num2, _ := strconv.Atoi(str[i:length])
+		num1, err := strconv.Atoi(str[0:i])
+		if err != nil {
+			fmt.Println(err)
+		}
+
+		num2, err := strconv.Atoi(str[i:length])
+		if err != nil {
+			fmt.Println(err)
+		}
 
 		if num1+num2 == num {
 			return true
