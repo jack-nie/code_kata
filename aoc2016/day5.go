@@ -49,6 +49,8 @@ func main() {
 	var doorId = "wtnhxymk"
 	pass := findPassword(doorId)
 	fmt.Println(pass)
+	pass2 := findPassWordTwo(doorId)
+	fmt.Println(pass2)
 }
 
 func findPassword(doorId string) string {
@@ -62,4 +64,24 @@ func findPassword(doorId string) string {
 	}
 
 	return passWord
+}
+
+func findPassWordTwo(doorId string) string {
+	k := 0
+	filled := make([]bool, 8)
+	passWord := make([]byte, 8)
+
+	for i := 0; k < 8; i++ {
+		hash := md5.Sum([]byte(doorId + strconv.Itoa(i)))
+		hexStr := hex.EncodeToString(hash[:])
+		if hexStr[0:5] == "00000" && rune(hexStr[5:6][0]) <= '7' {
+			index, _ := strconv.Atoi(hexStr[5:6])
+			if filled[index] == false {
+				filled[index], passWord[index] = true, []byte(hexStr[6:7])[0]
+				k++
+			}
+		}
+	}
+
+	return string(passWord[:])
 }
