@@ -49,7 +49,11 @@ func (p PairList) Len() int {
 }
 
 func (p PairList) Less(i, j int) bool {
-	return p[i].Value < p[j].Value
+	if p[i].Value != p[j].Value {
+		return p[i].Value < p[j].Value
+	}
+
+	return p[i].Key > p[j].Key
 }
 
 func (p PairList) Swap(i, j int) {
