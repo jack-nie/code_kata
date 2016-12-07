@@ -125,6 +125,44 @@ func convertIntArrayToString(intArray []int) string {
 	return strings.Join(valuesText, "")
 }
 
+type pos struct {
+	x, y int
+}
+
+func key(keypad [][]string, p pos) string {
+	if p.x >= len(keypad) || p.x < 0 || p.y < 0 || p.y >= len(keypad) {
+		return " "
+	}
+	return keypad[p.y][p.x]
+}
+
+func move(p pos, dir rune) pos {
+	switch dir {
+	case 'U':
+		p.y--
+	case 'D':
+		p.y++
+	case 'R':
+		p.x++
+	case 'L':
+		p.x--
+	}
+	return p
+}
+
+func follow(p pos, keypad [][]string, dirs []string) string {
+	var keys string
+	for _, line := range dirs {
+		for _, d := range line {
+			if newpos := move(p, d); key(keypad, newpos) != " " {
+				p = newpos
+			}
+		}
+		keys += key(keypad, p)
+	}
+	return keys
+}
+
 func main() {
 	container := loadData("day2.txt")
 	num := 5
@@ -137,4 +175,14 @@ func main() {
 	}
 
 	fmt.Println(convertIntArrayToString(nums))
+	p := pos{0, 2}
+	keypad := [][]string{
+		{" ", " ", "1", " ", " "},
+		{" ", "2", "3", "4", " "},
+		{"5", "6", "7", "8", "9"},
+		{" ", "A", "B", "C", " "},
+		{" ", " ", "D", " ", " "},
+	}
+
+	fmt.Println(follow(p, keypad, container))
 }
