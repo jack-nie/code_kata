@@ -37,6 +37,7 @@ import (
 
 func main() {
 	count := 0
+	count2 := 0
 	dat := loadData("day3.txt")
 	for _, nums := range dat {
 		res0, res1, res2 := parseNums(nums)
@@ -45,7 +46,17 @@ func main() {
 		}
 	}
 
+	dat2 := parseNumsTwo(dat)
+
+	for _, nums := range dat2 {
+		res0, res1, res2 := parseNums(nums)
+		if validTriangles(res0, res1, res2) {
+			count2++
+		}
+	}
+
 	fmt.Println(count)
+	fmt.Println(count2)
 }
 
 func validTriangles(res0 int, res1 int, res2 int) bool {
@@ -66,6 +77,22 @@ func parseNums(nums []string) (int, int, int) {
 		log.Fatal(err)
 	}
 	return res0, res1, res2
+}
+
+func parseNumsTwo(dat [][]string) [][]string {
+	length := len(dat)
+	var container [][]string
+	for i := 0; i < length; i += 3 {
+		res0 := dat[i+0]
+		res1 := dat[i+1]
+		res2 := dat[i+2]
+		for j := 0; j < 3; j++ {
+			var innerContainer []string
+			innerContainer = append(innerContainer, res0[j], res1[j], res2[j])
+			container = append(container, innerContainer)
+		}
+	}
+	return container
 }
 
 func loadData(filePath string) [][]string {
