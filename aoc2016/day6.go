@@ -48,16 +48,35 @@ import (
 	"sort"
 )
 
-func rankByWordCount(wordFrequencies map[string]int) PairList {
-	pl := make(PairList, len(wordFrequencies))
-	i := 0
-	for k, v := range wordFrequencies {
-		pl[i] = Pair{k, v}
-		i++
+func main() {
+	input := loadData("day6.txt")
+	length := len(input)
+	var str string
+	for i := 0; i < 8; i++ {
+		count := make(map[string]int)
+		for j := 0; j < length; j++ {
+			byt := []byte(input[j])
+			count[string(byt[i])] = count[string(byt[i])] + 1
+		}
+		pl := rankByWordCount(count)
+		str = str + pl[0].Key
 	}
 
-	sort.Sort(sort.Reverse(pl))
-	return pl
+	fmt.Println(str)
+}
+
+func loadData(filePath string) []string {
+	dat, err := os.Open(filePath)
+	if err != nil {
+		log.Fatal(err)
+	}
+	var container []string
+	scanner := bufio.NewScanner(dat)
+	for scanner.Scan() {
+		text := scanner.Text()
+		container = append(container, text)
+	}
+	return container
 }
 
 type Pair struct {
@@ -79,35 +98,16 @@ func (p PairList) Swap(i, j int) {
 	p[i], p[j] = p[j], p[i]
 }
 
-func loadData(filePath string) []string {
-	dat, err := os.Open(filePath)
-	if err != nil {
-		log.Fatal(err)
-	}
-	var container []string
-	scanner := bufio.NewScanner(dat)
-	for scanner.Scan() {
-		text := scanner.Text()
-		container = append(container, text)
-	}
-	return container
-}
-
-func main() {
-	input := loadData("day6.txt")
-	length := len(input)
-	var str string
-	for i := 0; i < 8; i++ {
-		count := make(map[string]int)
-		for j := 0; j < length; j++ {
-			byt := []byte(input[j])
-			count[string(byt[i])] = count[string(byt[i])] + 1
-		}
-		pl := rankByWordCount(count)
-		str = str + pl[0].Key
+func rankByWordCount(wordFrequencies map[string]int) PairList {
+	pl := make(PairList, len(wordFrequencies))
+	i := 0
+	for k, v := range wordFrequencies {
+		pl[i] = Pair{k, v}
+		i++
 	}
 
-	fmt.Println(str)
+	sort.Sort(sort.Reverse(pl))
+	return pl
 }
 
 // part two: in function Less, change from "<" to ">"

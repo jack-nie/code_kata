@@ -51,16 +51,18 @@ func main() {
 	}
 }
 
-func rankByWordCount(wordFrequencies map[string]int) PairList {
-	pl := make(PairList, len(wordFrequencies))
-	i := 0
-	for k, v := range wordFrequencies {
-		pl[i] = Pair{k, v}
-		i++
+func loadData(filePath string) []string {
+	dat, err := os.Open(filePath)
+	if err != nil {
+		log.Fatal(err)
 	}
-
-	sort.Sort(sort.Reverse(pl))
-	return pl
+	var container []string
+	scanner := bufio.NewScanner(dat)
+	for scanner.Scan() {
+		text := scanner.Text()
+		container = append(container, text)
+	}
+	return container
 }
 
 type Pair struct {
@@ -86,18 +88,16 @@ func (p PairList) Swap(i, j int) {
 	p[i], p[j] = p[j], p[i]
 }
 
-func loadData(filePath string) []string {
-	dat, err := os.Open(filePath)
-	if err != nil {
-		log.Fatal(err)
+func rankByWordCount(wordFrequencies map[string]int) PairList {
+	pl := make(PairList, len(wordFrequencies))
+	i := 0
+	for k, v := range wordFrequencies {
+		pl[i] = Pair{k, v}
+		i++
 	}
-	var container []string
-	scanner := bufio.NewScanner(dat)
-	for scanner.Scan() {
-		text := scanner.Text()
-		container = append(container, text)
-	}
-	return container
+
+	sort.Sort(sort.Reverse(pl))
+	return pl
 }
 
 func parse(container []string) map[string]int {

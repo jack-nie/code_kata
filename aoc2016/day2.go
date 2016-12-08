@@ -54,6 +54,43 @@ import (
 	"strings"
 )
 
+func main() {
+	container := loadData("day2.txt")
+	num := 5
+	var nums []int
+
+	for _, line := range container {
+		s := strings.Split(line, "")
+		num = calculateNum(s, num)
+		nums = append(nums, num)
+	}
+
+	fmt.Println(convertIntArrayToString(nums))
+	p := pos{0, 2}
+	keypad := [][]string{
+		{" ", " ", "1", " ", " "},
+		{" ", "2", "3", "4", " "},
+		{"5", "6", "7", "8", "9"},
+		{" ", "A", "B", "C", " "},
+		{" ", " ", "D", " ", " "},
+	}
+
+	fmt.Println(follow(p, keypad, container))
+}
+func loadData(filePath string) []string {
+	dat, err := os.Open(filePath)
+	if err != nil {
+		log.Fatal(err)
+	}
+	var container []string
+	scanner := bufio.NewScanner(dat)
+	for scanner.Scan() {
+		text := scanner.Text()
+		container = append(container, text)
+	}
+	return container
+}
+
 func moveUp(num int) int {
 	if num-3 > 0 {
 		return num - 3
@@ -84,20 +121,6 @@ func moveDown(num int) int {
 	} else {
 		return num
 	}
-}
-
-func loadData(filePath string) []string {
-	dat, err := os.Open(filePath)
-	if err != nil {
-		log.Fatal(err)
-	}
-	var container []string
-	scanner := bufio.NewScanner(dat)
-	for scanner.Scan() {
-		text := scanner.Text()
-		container = append(container, text)
-	}
-	return container
 }
 
 func calculateNum(str []string, num int) int {
@@ -161,28 +184,4 @@ func follow(p pos, keypad [][]string, dirs []string) string {
 		keys += key(keypad, p)
 	}
 	return keys
-}
-
-func main() {
-	container := loadData("day2.txt")
-	num := 5
-	var nums []int
-
-	for _, line := range container {
-		s := strings.Split(line, "")
-		num = calculateNum(s, num)
-		nums = append(nums, num)
-	}
-
-	fmt.Println(convertIntArrayToString(nums))
-	p := pos{0, 2}
-	keypad := [][]string{
-		{" ", " ", "1", " ", " "},
-		{" ", "2", "3", "4", " "},
-		{"5", "6", "7", "8", "9"},
-		{" ", "A", "B", "C", " "},
-		{" ", " ", "D", " ", " "},
-	}
-
-	fmt.Println(follow(p, keypad, container))
 }
