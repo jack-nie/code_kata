@@ -36,6 +36,15 @@ import (
 	"strings"
 )
 
+func main() {
+	arr := parse(loadData("day4.txt"))
+	var count int
+	for _, i := range arr {
+		count += i
+	}
+	fmt.Println(count)
+}
+
 func rankByWordCount(wordFrequencies map[string]int) PairList {
 	pl := make(PairList, len(wordFrequencies))
 	i := 0
@@ -45,7 +54,6 @@ func rankByWordCount(wordFrequencies map[string]int) PairList {
 	}
 
 	sort.Sort(sort.Reverse(pl))
-	fmt.Println(pl)
 	return pl
 }
 
@@ -72,26 +80,25 @@ func (p PairList) Swap(i, j int) {
 	p[i], p[j] = p[j], p[i]
 }
 
-func main() {
-	arr := loadData("day4.txt")
-	var count int
-	for _, i := range arr {
-		count += i
-	}
-	fmt.Println(count)
-}
-
-func loadData(filePath string) []int {
-	var tempArr []int
+func loadData(filePath string) []string {
 	dat, err := os.Open(filePath)
 	if err != nil {
 		log.Fatal(err)
 	}
-
+	var container []string
 	scanner := bufio.NewScanner(dat)
-	re := regexp.MustCompile("(.*)-([0-9]+)\\[([a-z]{5})\\]")
 	for scanner.Scan() {
-		line := scanner.Text()
+		text := scanner.Text()
+		container = append(container, text)
+	}
+	return container
+}
+
+func parse(container []string) []int {
+	var tempArr []int
+	re := regexp.MustCompile("(.*)-([0-9]+)\\[([a-z]{5})\\]")
+	for _, line := range container {
+
 		arr := re.FindStringSubmatch(line)
 		str := arr[1]
 
@@ -104,6 +111,7 @@ func loadData(filePath string) []int {
 		if isRealRoom(str, checkSum) {
 			tempArr = append(tempArr, num)
 		}
+
 	}
 	return tempArr
 }
