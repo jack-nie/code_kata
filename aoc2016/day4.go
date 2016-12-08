@@ -45,6 +45,7 @@ func rankByWordCount(wordFrequencies map[string]int) PairList {
 	}
 
 	sort.Sort(sort.Reverse(pl))
+	fmt.Println(pl)
 	return pl
 }
 
@@ -74,7 +75,7 @@ func (p PairList) Swap(i, j int) {
 func main() {
 	arr := loadData("day4.txt")
 	var count int
-	for i := range arr {
+	for _, i := range arr {
 		count += i
 	}
 	fmt.Println(count)
@@ -88,35 +89,41 @@ func loadData(filePath string) []int {
 	}
 
 	scanner := bufio.NewScanner(dat)
-	reForNum := regexp.MustCompile("[0-9]+")
-	reForStr := regexp.MustCompile("[a-z]+")
+	re := regexp.MustCompile("(.*)-([0-9]+)\\[([a-z]{5})\\]")
 	for scanner.Scan() {
 		line := scanner.Text()
-		arr := strings.Split(line, "-")
-		str, numStr := strings.Join(arr[0:len(arr)-1], ""), arr[len(arr)-1]
+		arr := re.FindStringSubmatch(line)
+		str := arr[1]
 
-		num, err := strconv.Atoi(string(reForNum.Find([]byte(numStr))))
+		num, err := strconv.Atoi(arr[2])
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		checkSum := string(reForStr.Find([]byte(numStr)))
-		count := make(map[string]int)
-		length := len(str)
-		byt := []byte(str)
-		for j := 0; j < length; j++ {
-			count[string(byt[j])] = count[string(byt[j])] + 1
-		}
-		pl := rankByWordCount(count)
-		var tmp []string
-		for _, k := range pl {
-			tmp = append(tmp, k.Key)
-		}
-
-		tmpStr := strings.Join(tmp[:5], "")
-		if tmpStr == checkSum {
+		checkSum := arr[3]
+		if isRealRoom(str, checkSum) {
 			tempArr = append(tempArr, num)
 		}
 	}
 	return tempArr
+}
+
+func isRealRoom(roomName string, checkSum string) bool {
+	count := make(map[string]int)
+
+	length := len(roomName)
+	byt := []byte(roomName)
+	for j := 0; j < length; j++ {
+		if string(byt[j]) != "-" {
+			count[string(byt[j])] = count[string(byt[j])] + 1
+		}
+	}
+	pl := rankByWordCount(count)
+	var tmp []string
+	for _, k := range pl {
+		tmp = append(tmp, k.Key)
+	}
+
+	tmpStr := strings.Join(tmp[:5], "")
+	return (tmpStr == checkSum) && true
 }
