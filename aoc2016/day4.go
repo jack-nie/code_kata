@@ -37,24 +37,32 @@ import (
 )
 
 func main() {
-	arr := parse(loadData("day4.txt"))
+	realRoomMap := parse(loadData("day4.txt"))
 	var count int
-	for _, i := range arr {
-		count += i
+	for _, v := range realRoomMap {
+		count += v
 	}
 	fmt.Println(count)
+	for k, v := range realRoomMap {
+		if decrypt(k, v) == "northpole object storage" {
+			fmt.Println(v)
+			break
+		}
+	}
 }
 
-func rankByWordCount(wordFrequencies map[string]int) PairList {
-	pl := make(PairList, len(wordFrequencies))
-	i := 0
-	for k, v := range wordFrequencies {
-		pl[i] = Pair{k, v}
-		i++
+func loadData(filePath string) []string {
+	dat, err := os.Open(filePath)
+	if err != nil {
+		log.Fatal(err)
 	}
-
-	sort.Sort(sort.Reverse(pl))
-	return pl
+	var container []string
+	scanner := bufio.NewScanner(dat)
+	for scanner.Scan() {
+		text := scanner.Text()
+		container = append(container, text)
+	}
+	return container
 }
 
 type Pair struct {
@@ -80,22 +88,20 @@ func (p PairList) Swap(i, j int) {
 	p[i], p[j] = p[j], p[i]
 }
 
-func loadData(filePath string) []string {
-	dat, err := os.Open(filePath)
-	if err != nil {
-		log.Fatal(err)
+func rankByWordCount(wordFrequencies map[string]int) PairList {
+	pl := make(PairList, len(wordFrequencies))
+	i := 0
+	for k, v := range wordFrequencies {
+		pl[i] = Pair{k, v}
+		i++
 	}
-	var container []string
-	scanner := bufio.NewScanner(dat)
-	for scanner.Scan() {
-		text := scanner.Text()
-		container = append(container, text)
-	}
-	return container
+
+	sort.Sort(sort.Reverse(pl))
+	return pl
 }
 
-func parse(container []string) []int {
-	var tempArr []int
+func parse(container []string) map[string]int {
+	realRoomMap := make(map[string]int)
 	re := regexp.MustCompile("(.*)-([0-9]+)\\[([a-z]{5})\\]")
 	for _, line := range container {
 
@@ -109,11 +115,11 @@ func parse(container []string) []int {
 
 		checkSum := arr[3]
 		if isRealRoom(str, checkSum) {
-			tempArr = append(tempArr, num)
+			realRoomMap[str] = num
 		}
 
 	}
-	return tempArr
+	return realRoomMap
 }
 
 func isRealRoom(roomName string, checkSum string) bool {
@@ -134,4 +140,16 @@ func isRealRoom(roomName string, checkSum string) bool {
 
 	tmpStr := strings.Join(tmp[:5], "")
 	return (tmpStr == checkSum) && true
+}
+
+func decrypt(realString string, sectorId int) string {
+	d := make([]byte, len(realString))
+	for i, c := range realString {
+		if c == '-' {
+			d[i] = ' '
+		} else {
+			d[i] = byte((int(c-'a')+sectorId)%26 + 'a')
+		}
+	}
+	return string(d)
 }

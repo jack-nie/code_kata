@@ -59,6 +59,23 @@ func main() {
 	fmt.Println(count2)
 }
 
+func loadData(filePath string) [][]string {
+	dat, err := os.Open(filePath)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	var container [][]string
+	scanner := bufio.NewScanner(dat)
+
+	for scanner.Scan() {
+		text := strings.Fields(scanner.Text())
+		container = append(container, text)
+	}
+
+	return container
+}
+
 func validTriangles(res0 int, res1 int, res2 int) bool {
 	return true && res0 > 0 && res1 > 0 && res2 > 0 && (res0+res1 > res2) && (res0+res2 > res1) && (res1+res2 > res0)
 }
@@ -92,22 +109,5 @@ func parseNumsTwo(dat [][]string) [][]string {
 			container = append(container, innerContainer)
 		}
 	}
-	return container
-}
-
-func loadData(filePath string) [][]string {
-	dat, err := os.Open(filePath)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	var container [][]string
-	scanner := bufio.NewScanner(dat)
-
-	for scanner.Scan() {
-		text := strings.Fields(scanner.Text())
-		container = append(container, text)
-	}
-
 	return container
 }

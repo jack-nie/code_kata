@@ -36,6 +36,29 @@ import (
 	"strings"
 )
 
+func main() {
+	dirs := parse("day1.txt")
+	end := follow(dirs)
+	fmt.Println(end.dist())
+
+	end = visitTwice(dirs)
+	fmt.Println(end.dist())
+}
+
+func loadData(filePath string) []string {
+	dat, err := os.Open(filePath)
+	if err != nil {
+		log.Fatal(err)
+	}
+	var container []string
+	scanner := bufio.NewScanner(dat)
+	for scanner.Scan() {
+		text := scanner.Text()
+		container = append(container, text)
+	}
+	return container
+}
+
 type pos struct {
 	x, y int
 }
@@ -131,27 +154,4 @@ func visitTwice(dirs []dir) pos {
 		}
 	}
 	return p
-}
-
-func loadData(filePath string) []string {
-	dat, err := os.Open(filePath)
-	if err != nil {
-		log.Fatal(err)
-	}
-	var container []string
-	scanner := bufio.NewScanner(dat)
-	for scanner.Scan() {
-		text := scanner.Text()
-		container = append(container, text)
-	}
-	return container
-}
-
-func main() {
-	dirs := parse("day1.txt")
-	end := follow(dirs)
-	fmt.Println(end.dist())
-
-	end = visitTwice(dirs)
-	fmt.Println(end.dist())
 }
