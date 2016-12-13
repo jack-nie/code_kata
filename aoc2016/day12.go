@@ -27,6 +27,13 @@
 // The above code would set register a to 41, increase its value by 2, decrease its value by 1, and then skip the last dec a (because a is not zero, so the jnz a 2 skips it), leaving register a at 42. When you move past the last instruction, the program halts.
 //
 // After executing the assembunny code in your puzzle input, what value is left in register a?
+//
+// --- Part Two ---
+//
+// As you head down the fire escape to the monorail, you notice it didn't start; register c needs to be initialized to the position of the ignition key.
+//
+// If you instead initialize register c to be 1, what value is now left in register a?
+
 package main
 
 import (
@@ -39,19 +46,16 @@ import (
 )
 
 func main() {
-	skip := 0
 	register := make(map[string]int)
 	lines := loadData("day12.txt")
-
-	for _, line := range lines {
-		if skip == 0 {
-			skip = processInstructions(register, line)
-		} else {
-			skip--
-		}
-	}
+	processInstructions(register, lines)
 	fmt.Println(register["a"])
-	fmt.Println(register)
+
+	register = map[string]int{
+		"c": 1,
+	}
+	processInstructions(register, lines)
+	fmt.Println(register["a"])
 }
 
 func loadData(filePath string) []string {
@@ -68,31 +72,33 @@ func loadData(filePath string) []string {
 	return container
 }
 
-func processInstructions(register map[string]int, line string) int {
-	var skip int
-	instructions := strings.Fields(line)
-	switch instructions[0] {
-	case "cpy":
-		value, err := strconv.Atoi(instructions[1])
-		if err != nil {
-			value = register[instructions[1]]
+func processInstructions(register map[string]int, lines []string) {
+	eval := func(s string) int {
+		if n, err := strconv.Atoi(s); err == nil {
+			return n
 		}
-		register[instructions[2]] = value
-	case "inc":
-		register[instructions[1]] = register[instructions[1]] + 1
-	case "jnz":
-		value, err := strconv.Atoi(instructions[2])
-		if err != nil {
-			log.Fatal(err)
-		}
-
-		flag, _ := strconv.Atoi(instructions[1])
-		if flag == 0 {
-			skip = 0
-		}
-		skip = value
-	case "dec":
-		register[instructions[1]] = register[instructions[1]] - 1
+		return register[s]
 	}
-	return skip
+
+	for i := 0; i < len(lines); i++ {
+		instructions := strings.Fields(lines[i])
+		switch instructions[0] {
+		case "cpy":
+			register[instructions[2]] = eval(instructions[1])
+		case "inc":
+			register[instructions[1]]++
+		case "jnz":
+			value, err := strconv.Atoi(instructions[2])
+			if err != nil {
+				log.Fatal(err)
+			}
+			flag := eval(instructions[1])
+			if flag != 0 {
+				i += value
+				i--
+			}
+		case "dec":
+			register[instructions[1]]--
+		}
+	}
 }
