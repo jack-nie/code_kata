@@ -34,74 +34,92 @@
 // Thus, reaching 7,4 would take a minimum of 11 steps (starting from your current location, 1,1).
 //
 // What is the fewest number of steps required for you to reach 31,39?
+// --- Part Two ---
+//
+// How many locations (distinct x,y coordinates, including your starting location) can you reach in at most 50 steps?
 
 package main
 
 import (
 	"fmt"
-	"log"
 	"strconv"
 )
 
 const (
-	endX   = 31
-	endY   = 39
-	input  = 1358
-	length = 100
+	input = 1358
 )
 
 func main() {
-	maze := make(map[pos]int)
-	count := 0
+	start := make(map[pos]int)
+	mazeOuter := make(map[pos]int)
+	start[pos{1, 1}] = 1
+	count1 := 0
+	count2 := 0
 
-	step(0, 0, maze)
-	for _, _ = range maze {
-		count++
+	for !contains(start) {
+		count1++
+		start = step(start, mazeOuter)
+		if count1 == 50 {
+			count2 = len(mazeOuter)
+		}
 	}
+	fmt.Println(count1)
+	fmt.Println(count2)
+}
 
-	fmt.Println(count)
-	fmt.Println(maze)
+func contains(start map[pos]int) bool {
+	var flag bool
+	for k, _ := range start {
+		if !(k.x == 31 && k.y == 39) {
+			continue
+		} else {
+			flag = true
+		}
+	}
+	return flag
 }
 
 type pos struct {
 	x, y int
 }
 
-func isOdd(x, y int) bool {
+func isEven(x, y int) bool {
 	num := x*x + 3*x + 2*x*y + y + y*y
-	binInt, err := strconv.Atoi(strconv.FormatInt(int64(num+input), 2))
-	if err != nil {
-		log.Fatal(err)
-	}
-	return isOddInt(binInt)
+	binInt := strconv.FormatInt(int64(num+input), 2)
+	return isEvenInt(binInt)
 }
 
-func isOddInt(n int) bool {
-	n -= (n >> 1) & 0x5555555555555555
-	n = (n>>2)&0x3333333333333333 + n&0x3333333333333333
-	n += n >> 4
-	n &= 0x0f0f0f0f0f0f0f0f
-	n *= 0x0101010101010101
-	return byte(n>>56)%2 != 0
+func isEvenInt(s string) bool {
+	var i int
+	for _, c := range s {
+		if c == '1' {
+			i++
+		}
+	}
+	return (i%2 == 0)
 }
 
-func step(x, y int, maze map[pos]int) {
-	maze[pos{x, y}] = 1
-	if x == endX && y == endY {
-		return
+func step(start map[pos]int, mazeOuter map[pos]int) map[pos]int {
+	mazeInner := make(map[pos]int)
+	for k, _ := range start {
+		x := k.x
+		y := k.y
+		if mazeInner[pos{x, y + 1}] != 1 && isEven(x, y+1) {
+			mazeInner[pos{x, y + 1}] = 1
+			mazeOuter[pos{x, y + 1}] = 1
+		}
+		if mazeInner[pos{x + 1, y}] != 1 && isEven(x+1, y) {
+			mazeInner[pos{x + 1, y}] = 1
+			mazeOuter[pos{x + 1, y}] = 1
+		}
+		if y != 0 && mazeInner[pos{x, y - 1}] != 1 && isEven(x, y-1) {
+			mazeInner[pos{x, y - 1}] = 1
+			mazeOuter[pos{x, y - 1}] = 1
+		}
+		if x != 0 && mazeInner[pos{x - 1, y}] != 1 && isEven(x-1, y) {
+			mazeInner[pos{x - 1, y}] = 1
+			mazeOuter[pos{x - 1, y}] = 1
+		}
 	}
-
-	fmt.Println(maze)
-	if y < (length-1) && isOdd(x, y+1) {
-		step(x, y+1, maze)
-	}
-	if x < (length-1) && isOdd(x+1, y) {
-		step(x+1, y, maze)
-	}
-	if y > 0 && isOdd(x, y-1) {
-		step(x, y-1, maze)
-	}
-	if x > 0 && isOdd(x-1, y) {
-		step(x-1, y, maze)
-	}
+	return mazeInner
 }
