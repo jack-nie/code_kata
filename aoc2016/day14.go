@@ -80,7 +80,6 @@ func check(orig string, i int, charCount int, sLevel string) int {
 			if isSame(byts[j : j+3]) {
 				if checkMore(orig, i, byts[j], sLevel) {
 					count++
-					fmt.Println(i)
 					if count == 64 {
 						return i
 					}
@@ -121,10 +120,13 @@ func makeMd5Hash(orig string, i int) string {
 }
 
 func stretchedHash(orig string, i int) string {
+	s := makeMd5Hash(orig, i)
 	for j := 0; j < 2016; j++ {
-		orig = makeMd5Hash(orig, i)
+		byts := []byte(s)
+		data := md5.Sum(byts)
+		s = hex.EncodeToString(data[:])
 	}
-	return orig
+	return s
 }
 
 func checkMore(orig string, i int, byt byte, sLevel string) bool {
