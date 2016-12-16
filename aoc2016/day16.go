@@ -84,7 +84,7 @@ func checkSum(byts []byte) string {
 	buf := byts
 	for len(buf)%2 == 0 {
 		for i := 0; i < len(buf); i += 2 {
-			if byts[i] == byts[i+1] {
+			if buf[i] == buf[i+1] {
 				buf[i/2] = '1'
 			} else {
 				buf[i/2] = '0'
