@@ -112,6 +112,7 @@ func loadData(filePath string) []string {
 		log.Fatal(err)
 	}
 	var container []string
+	defer dat.Close()
 	scanner := bufio.NewScanner(dat)
 	for scanner.Scan() {
 		text := scanner.Text()
@@ -155,7 +156,7 @@ func isABA(strs string) bool {
 	}
 
 	for _, item := range abas {
-		var tmp []byte = []byte{item[1], item[0], item[1]}
+		var tmp = []byte{item[1], item[0], item[1]}
 		if contains(babs, tmp) {
 			return true
 		}

@@ -78,6 +78,7 @@ func loadData(filePath string) []string {
 		log.Fatal(err)
 	}
 	var container []string
+	defer dat.Close()
 	scanner := bufio.NewScanner(dat)
 	for scanner.Scan() {
 		text := scanner.Text()
@@ -161,6 +162,7 @@ func calculatePad(keypad [][]bool) int {
 	return count
 }
 
+//Keypad exported function????
 func Keypad(x, y int) [][]bool {
 	keypad := make([][]bool, y)
 	for i := range keypad {

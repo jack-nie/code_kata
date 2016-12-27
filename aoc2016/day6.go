@@ -71,6 +71,7 @@ func loadData(filePath string) []string {
 		log.Fatal(err)
 	}
 	var container []string
+	defer dat.Close()
 	scanner := bufio.NewScanner(dat)
 	for scanner.Scan() {
 		text := scanner.Text()
@@ -79,11 +80,13 @@ func loadData(filePath string) []string {
 	return container
 }
 
+//Pair for sort
 type Pair struct {
 	Key   string
 	Value int
 }
 
+//PairList for sort
 type PairList []Pair
 
 func (p PairList) Len() int {

@@ -51,6 +51,7 @@ func loadData(filePath string) []string {
 		log.Fatal(err)
 	}
 	var container []string
+	defer dat.Close()
 	scanner := bufio.NewScanner(dat)
 	for scanner.Scan() {
 		text := scanner.Text()
@@ -88,6 +89,7 @@ func walk(p *pos, orientation int, length int) {
 	}
 }
 
+//Abs abs thing
 func Abs(x int) int {
 	if x < 0 {
 		return -x
