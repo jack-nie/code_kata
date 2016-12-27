@@ -78,6 +78,7 @@ func loadData(filePath string) []string {
 		log.Fatal(err)
 	}
 	var container []string
+	defer dat.Close()
 	scanner := bufio.NewScanner(dat)
 	for scanner.Scan() {
 		text := scanner.Text()

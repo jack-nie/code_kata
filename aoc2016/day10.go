@@ -50,12 +50,13 @@ func main() {
 }
 
 func loadData(filePath string) []string {
-	dat, err := os.Open(filePath)
+	f, err := os.Open(filePath)
 	if err != nil {
 		log.Fatal(err)
 	}
 	var container []string
-	scanner := bufio.NewScanner(dat)
+	defer f.Close()
+	scanner := bufio.NewScanner(f)
 	for scanner.Scan() {
 		text := scanner.Text()
 		container = append(container, text)
