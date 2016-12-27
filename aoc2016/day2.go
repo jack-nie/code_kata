@@ -77,6 +77,7 @@ func main() {
 
 	fmt.Println(follow(p, keypad, container))
 }
+
 func loadData(filePath string) []string {
 	dat, err := os.Open(filePath)
 	if err != nil {
@@ -94,7 +95,7 @@ func loadData(filePath string) []string {
 func moveUp(num int) int {
 	if num-3 > 0 {
 		return num - 3
-	} 
+	}
 	return num
 }
 
@@ -108,15 +109,15 @@ func moveLeft(num int) int {
 func moveRight(num int) int {
 	if num != 3 && num != 6 && num != 9 {
 		return num + 1
-	} 
-    return num
+	}
+	return num
 }
 
 func moveDown(num int) int {
 	if num != 7 && num != 8 && num != 9 {
 		return num + 3
 	}
-    return num
+	return num
 }
 
 func calculateNum(str []string, num int) int {
