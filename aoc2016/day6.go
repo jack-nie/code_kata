@@ -79,11 +79,13 @@ func loadData(filePath string) []string {
 	return container
 }
 
+//Pair for sort
 type Pair struct {
 	Key   string
 	Value int
 }
 
+//PairList for sort
 type PairList []Pair
 
 func (p PairList) Len() int {

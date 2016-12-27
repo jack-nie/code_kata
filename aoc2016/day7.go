@@ -155,7 +155,7 @@ func isABA(strs string) bool {
 	}
 
 	for _, item := range abas {
-		var tmp []byte = []byte{item[1], item[0], item[1]}
+		var tmp = []byte{item[1], item[0], item[1]}
 		if contains(babs, tmp) {
 			return true
 		}

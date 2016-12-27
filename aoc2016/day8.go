@@ -161,6 +161,7 @@ func calculatePad(keypad [][]bool) int {
 	return count
 }
 
+//Keypad exported function????
 func Keypad(x, y int) [][]bool {
 	keypad := make([][]bool, y)
 	for i := range keypad {

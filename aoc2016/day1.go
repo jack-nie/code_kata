@@ -88,6 +88,7 @@ func walk(p *pos, orientation int, length int) {
 	}
 }
 
+//Abs abs thing
 func Abs(x int) int {
 	if x < 0 {
 		return -x

@@ -82,7 +82,6 @@ func across(n int) int {
 	dist := n - i
 	if dist < i {
 		return dist
-	} else {
-		return 2*n - 3*i
-	}
+	} 
+	return 2*n - 3*i
 }

@@ -94,33 +94,29 @@ func loadData(filePath string) []string {
 func moveUp(num int) int {
 	if num-3 > 0 {
 		return num - 3
-	} else {
-		return num
-	}
+	} 
+	return num
 }
 
 func moveLeft(num int) int {
 	if num != 1 && num != 4 && num != 7 {
 		return num - 1
-	} else {
-		return num
 	}
+	return num
 }
 
 func moveRight(num int) int {
 	if num != 3 && num != 6 && num != 9 {
 		return num + 1
-	} else {
-		return num
-	}
+	} 
+    return num
 }
 
 func moveDown(num int) int {
 	if num != 7 && num != 8 && num != 9 {
 		return num + 3
-	} else {
-		return num
 	}
+    return num
 }
 
 func calculateNum(str []string, num int) int {

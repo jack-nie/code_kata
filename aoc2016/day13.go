@@ -69,7 +69,7 @@ func main() {
 
 func contains(start map[pos]int) bool {
 	var flag bool
-	for k, _ := range start {
+	for k := range start {
 		if !(k.x == 31 && k.y == 39) {
 			continue
 		} else {
@@ -101,7 +101,7 @@ func isEvenInt(s string) bool {
 
 func step(start map[pos]int, mazeOuter map[pos]int) map[pos]int {
 	mazeInner := make(map[pos]int)
-	for k, _ := range start {
+	for k := range start {
 		x := k.x
 		y := k.y
 		if mazeInner[pos{x, y + 1}] != 1 && isEven(x, y+1) {

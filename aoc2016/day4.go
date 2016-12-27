@@ -65,11 +65,13 @@ func loadData(filePath string) []string {
 	return container
 }
 
+//Pair pair
 type Pair struct {
 	Key   string
 	Value int
 }
 
+//PairList pair list
 type PairList []Pair
 
 func (p PairList) Len() int {
@@ -142,13 +144,13 @@ func isRealRoom(roomName string, checkSum string) bool {
 	return (tmpStr == checkSum) && true
 }
 
-func decrypt(realString string, sectorId int) string {
+func decrypt(realString string, sectorID int) string {
 	d := make([]byte, len(realString))
 	for i, c := range realString {
 		if c == '-' {
 			d[i] = ' '
 		} else {
-			d[i] = byte((int(c-'a')+sectorId)%26 + 'a')
+			d[i] = byte((int(c-'a')+sectorID)%26 + 'a')
 		}
 	}
 	return string(d)
