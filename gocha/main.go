@@ -19,7 +19,7 @@ func pase_student() {
 	for i := 0; i < len(stus); i++ {
 		m[stus[i].Name] = &stus[i]
 	}
-	fmt.Printf("%v+", &m)
+	fmt.Printf("%+v", &m)
 }
 
 func main() {
