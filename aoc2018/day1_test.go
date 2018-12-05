@@ -2,16 +2,16 @@ package aoc
 
 import "testing"
 
-func TestCalcesult(t *testing.T) {
+func TestCalcResult(t *testing.T) {
 	result := calcResult("day1.txt")
-	if result != 10 {
-		t.Errorf("Falied expected %d, got %d", 10, result)
+	if result != 592 {
+		t.Errorf("Falied expected %d, got %d", 592, result)
 	}
 }
 
-func TestCalcesult2(t *testing.T) {
+func TestCalcResult2(t *testing.T) {
 	result := calcResult2("day1_2.txt")
-	if result != 10 {
-		t.Errorf("Falied expected %d, got %d", 10, result)
+	if result != 241 {
+		t.Errorf("Falied expected %d, got %d", 241, result)
 	}
 }
