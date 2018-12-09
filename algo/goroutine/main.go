@@ -32,6 +32,7 @@ func main() {
 		}
 	}
 	for i := 0; i < len(files); i++ {
+
 		defer files[i].Close()
 	}
 }
