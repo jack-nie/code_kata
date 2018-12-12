@@ -2,12 +2,16 @@ package aoc
 
 import "testing"
 
-func TestGetLenOverLaps(t *testing.T) {
-	result1, result2 := getLenOverlaps()
-	if result1 != 592 {
-		t.Errorf("Falied expected %d, got %d", 592, result1)
+func TestGetLenOverlaps(t *testing.T) {
+	result := getLenOverlaps()
+	if result != 124850 {
+		t.Errorf("Falied expected %d, got %d", 124850, result)
 	}
-	if result2 != 592 {
-		t.Errorf("Falied expected %d, got %d", 592, result2)
+}
+
+func TestGetLenOverlapsTwo(t *testing.T) {
+	result := getLenOverlapsTwo()
+	if result != 1097 {
+		t.Errorf("Falied expected %d, got %d", 1097, result)
 	}
 }

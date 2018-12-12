@@ -84,10 +84,10 @@ func mapClaims(data []string) (map[coord][]int, map[int][]int) {
 	return m, overlaps
 }
 
-func getLenOverlaps() (int, int) {
+func getLenOverlaps() int {
 	data := loadData("day3_2.txt")
 
-	m, overlaps := mapClaims(data)
+	m, _ := mapClaims(data)
 
 	partA := 0
 	for _, v := range m {
@@ -95,12 +95,17 @@ func getLenOverlaps() (int, int) {
 			partA++
 		}
 	}
+	return partA
+}
 
+func getLenOverlapsTwo() int {
+	data := loadData("day3_2.txt")
+	_, overlaps := mapClaims(data)
 	partB := []int{}
 	for k, v := range overlaps {
 		if len(v) == 0 {
 			partB = append(partB, k)
 		}
 	}
-	return partA, partB[0]
+	return partB[0]
 }
