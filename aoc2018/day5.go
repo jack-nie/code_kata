@@ -28,13 +28,13 @@ import (
 )
 
 func react(filename string) int {
-	content := loadData(filename)
-	str := ""
-	for _, v := range content {
-		str += strings.TrimSpace(v)
-	}
-	stack := make([]string, 0)
+	str := generateString(filename)
+	return reactCore(str)
+}
+
+func reactCore(str string) int {
 	var last string
+	stack := make([]string, 0)
 	for _, v := range str {
 		if len(stack) > 0 {
 			last = stack[len(stack)-1]
@@ -46,4 +46,47 @@ func react(filename string) int {
 		}
 	}
 	return len(stack)
+}
+
+func generateString(filename string) string {
+	content := loadData(filename)
+	str := ""
+	for _, v := range content {
+		str += strings.TrimSpace(v)
+	}
+	return str
+}
+
+// --- Part Two ---
+// Time to improve the polymer.
+//
+// One of the unit types is causing problems; it's preventing the polymer from collapsing as much as it should. Your goal is to figure out which unit type is causing the most problems, remove all instances of it (regardless of polarity), fully react the remaining polymer, and measure its length.
+//
+// For example, again using the polymer dabAcCaCBAcCcaDA from above:
+//
+// Removing all A/a units produces dbcCCBcCcD. Fully reacting this polymer produces dbCBcD, which has length 6.
+// Removing all B/b units produces daAcCaCAcCcaDA. Fully reacting this polymer produces daCAcaDA, which has length 8.
+// Removing all C/c units produces dabAaBAaDA. Fully reacting this polymer produces daDA, which has length 4.
+// Removing all D/d units produces abAcCaCBAcCcaA. Fully reacting this polymer produces abCBAc, which has length 6.
+// In this example, removing all C/c units was best, producing the answer 4.
+//
+// What is the length of the shortest polymer you can produce by removing all units of exactly one type and fully reacting the result?
+
+func reactTwo(filename string) int {
+	str := generateString(filename)
+	chars := []string{"a", "b", "c", "d", "e",
+		"f", "g", "h", "i", "j",
+		"k", "l", "m", "n", "o",
+		"p", "q", "r", "s", "t",
+		"u", "v", "w", "x", "y", "z",
+	}
+	var min int = 10000000
+	for _, v := range chars {
+		tmp := strings.Replace(strings.Replace(str, v, "", -1), strings.ToUpper(v), "", -1)
+		length := reactCore(tmp)
+		if min > length {
+			min = length
+		}
+	}
+	return min
 }
