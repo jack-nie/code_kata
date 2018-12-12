@@ -63,6 +63,13 @@ type shiftLog struct {
 }
 
 func reposeRecord(filename string) int {
+	result := reposeRecordCore(filename)
+	maxId := max(result)
+	minute, _ := mostMinute(result[maxId])
+	return int(maxId) * int(minute)
+}
+
+func reposeRecordCore(filename string) map[int64]*shiftLog {
 	strs := loadData(filename)
 	sort.Strings(strs)
 	result := make(map[int64]*shiftLog)
@@ -102,11 +109,7 @@ func reposeRecord(filename string) int {
 			result[guard].minute += (end - start)
 		}
 	}
-
-	maxId := max(result)
-	minute := mostMinute(result[maxId])
-
-	return int(maxId) * int(minute)
+	return result
 }
 
 func max(nums map[int64]*shiftLog) int64 {
@@ -120,7 +123,7 @@ func max(nums map[int64]*shiftLog) int64 {
 	return resultId
 }
 
-func mostMinute(shift *shiftLog) int64 {
+func mostMinute(shift *shiftLog) (int64, int) {
 	m := make(map[int64]int)
 	for i := 0; i < len(shift.start); i++ {
 		j := shift.start[i]
@@ -141,5 +144,27 @@ func mostMinute(shift *shiftLog) int64 {
 			minute = k
 		}
 	}
-	return minute
+	return minute, max
+}
+
+// --- Part Two ---
+// Strategy 2: Of all guards, which guard is most frequently asleep on the same minute?
+//
+// In the example above, Guard #99 spent minute 45 asleep more than any other guard or minute - three times in total. (In all other cases, any guard spent any minute asleep at most twice.)
+//
+// What is the ID of the guard you chose multiplied by the minute you chose? (In the above example, the answer would be 99 * 45 = 4455.)
+
+func reposeRecordTwo(filename string) int {
+	result := reposeRecordCore(filename)
+	var minute, guard int64
+	var max int
+	for k, v := range result {
+		i, j := mostMinute(v)
+		if max < j {
+			max = j
+			minute = i
+			guard = k
+		}
+	}
+	return int(minute) * int(guard)
 }
