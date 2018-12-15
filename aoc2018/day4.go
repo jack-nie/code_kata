@@ -64,7 +64,7 @@ type shiftLog struct {
 
 func reposeRecord(filename string) int {
 	result := reposeRecordCore(filename)
-	maxId := max(result)
+	maxId := maxId(result)
 	minute, _ := mostMinute(result[maxId])
 	return int(maxId) * int(minute)
 }
@@ -112,7 +112,7 @@ func reposeRecordCore(filename string) map[int64]*shiftLog {
 	return result
 }
 
-func max(nums map[int64]*shiftLog) int64 {
+func maxId(nums map[int64]*shiftLog) int64 {
 	var max, resultId int64
 	for k, v := range nums {
 		if v.minute > max {

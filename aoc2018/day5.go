@@ -80,7 +80,7 @@ func reactTwo(filename string) int {
 		"p", "q", "r", "s", "t",
 		"u", "v", "w", "x", "y", "z",
 	}
-	var min int = 10000000
+	var min int = 1<<31 - 1
 	for _, v := range chars {
 		tmp := strings.Replace(strings.Replace(str, v, "", -1), strings.ToUpper(v), "", -1)
 		length := reactCore(tmp)
