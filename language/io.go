@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"os"
 	"strings"
@@ -39,4 +40,27 @@ func main() {
 	buf2 := new(bytes.Buffer)
 	buf2.ReadFrom(r4)
 	fmt.Println(buf2.String())
+
+	r5 := strings.NewReader("Hello world, gogogo!\n")
+	buf3, err := ioutil.ReadAll(r5)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("%s", buf3)
+
+	files, err := ioutil.ReadDir(".")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, file := range files {
+		fmt.Println(file.Name())
+	}
+
+	content, err := ioutil.ReadFile("io.go")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("%s", content)
 }
