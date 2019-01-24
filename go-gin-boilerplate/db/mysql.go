@@ -12,8 +12,9 @@ import (
 var db *sql.DB
 
 func Init() {
+	var err error
 	c := config.GetConfig()
-	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@/%s", c.Get("mysql.username"), c.Get("mysql.password"), c.Get("mysql.dbname")))
+	db, err = sql.Open("mysql", fmt.Sprintf("%s:%s@/%s", c.Get("mysql.username"), c.Get("mysql.password"), c.Get("mysql.dbname")))
 	if err != nil {
 		logrus.Fatalf("connect to mysql failed: %s", err)
 	}
