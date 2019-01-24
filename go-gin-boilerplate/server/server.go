@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jack-nie/code_kata/go-gin-boilerplate/controllers"
 	"github.com/sirupsen/logrus"
 )
 
@@ -42,9 +43,9 @@ func NewRouter() *gin.Engine {
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
 
-	//health := new(controllers.HealthController)
+	health := new(controllers.HealthController)
 
-	//router.GET("/health", health.Status)
+	router.GET("/health", health.Status)
 	//router.Use(middlewares.AuthMiddleware())
 
 	//v1 := router.Group("v1")
