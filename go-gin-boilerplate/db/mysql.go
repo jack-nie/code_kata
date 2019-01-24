@@ -9,7 +9,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-var db *mysql.DB
+var db *sql.DB
 
 func Init() {
 	c := config.GetConfig()
@@ -19,6 +19,6 @@ func Init() {
 	}
 }
 
-func GetDB() *mysql.DB {
+func GetDB() *sql.DB {
 	return db
 }

@@ -2,7 +2,8 @@ package config
 
 import (
 	"path/filepath"
-	"spf13/viper"
+
+	"github.com/spf13/viper"
 
 	"github.com/sirupsen/logrus"
 )
