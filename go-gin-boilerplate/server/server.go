@@ -2,6 +2,7 @@ package server
 
 import (
 	"context"
+	"net/http"
 	"os"
 	"os/signal"
 	"time"
@@ -11,11 +12,10 @@ import (
 )
 
 func Init() {
-	config = config.GetConfig()
 	r := NewRouter()
-	srv := &http.server{
+	srv := &http.Server{
 		Addr:    ":8080",
-		Handler: router,
+		Handler: r,
 	}
 
 	go func() {

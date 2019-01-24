@@ -7,6 +7,7 @@ import (
 
 	"github.com/jack-nie/code_kata/go-gin-boilerplate/config"
 	"github.com/jack-nie/code_kata/go-gin-boilerplate/db"
+	"github.com/jack-nie/code_kata/go-gin-boilerplate/server"
 )
 
 func main() {
