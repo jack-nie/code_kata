@@ -6,7 +6,7 @@ import (
 	"os"
 
 	"github.com/jack-nie/code_kata/go-gin-boilerplate/config"
-	"github.com/jack-nie/code_kata/go-gin-boilerplate/db"
+	"github.com/jack-nie/code_kata/go-gin-boilerplate/models"
 	"github.com/jack-nie/code_kata/go-gin-boilerplate/server"
 )
 
@@ -19,6 +19,6 @@ func main() {
 
 	flag.Parse()
 	config.Init(*env)
-	db.Init()
+	models.InitDatabase()
 	server.Init()
 }

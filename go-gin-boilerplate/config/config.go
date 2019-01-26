@@ -13,10 +13,11 @@ var config *viper.Viper
 func Init(env string) {
 	config = viper.New()
 	config.SetConfigType("yaml")
-	viper.SetConfigName(env)
-	viper.AddConfigPath("../config/")
-	viper.AddConfigPath("config/")
-	err := viper.ReadInConfig()
+	config.SetConfigName(env)
+	config.AddConfigPath("../config/")
+	config.AddConfigPath("config/")
+	config.AddConfigPath(".")
+	err := config.ReadInConfig()
 	if err != nil {
 		logrus.Fatalf("fatal error config file: %s \n", err)
 	}

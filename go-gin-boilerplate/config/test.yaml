@@ -1,0 +1,5 @@
+---
+mysql:
+  username: "jack"
+  password: "jack"
+  dbname: "test"

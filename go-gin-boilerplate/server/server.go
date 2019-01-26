@@ -33,7 +33,7 @@ func Init() {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	if err := srv.Shutdown(ctx); err != nil {
-		logrus.Fatalf("Server Shutdown:", err)
+		logrus.Fatalf("Server Shutdown: %s", err)
 	}
 	logrus.Println("Server exiting")
 }
@@ -46,15 +46,14 @@ func NewRouter() *gin.Engine {
 	health := new(controllers.HealthController)
 
 	router.GET("/health", health.Status)
-	//router.Use(middlewares.AuthMiddleware())
 
-	//v1 := router.Group("v1")
-	//{
-	//	userGroup := v1.Group("user")
-	//	{
-	//		user := new(controllers.UserController)
-	//		userGroup.GET("/:id", user.Retrieve)
-	//	}
-	//}
+	v1 := router.Group("v1")
+	{
+		userGroup := v1.Group("users")
+		{
+			user := new(controllers.UsersController)
+			userGroup.POST("/signup", user.Signup)
+		}
+	}
 	return router
 }
