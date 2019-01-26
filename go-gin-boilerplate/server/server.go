@@ -53,6 +53,7 @@ func NewRouter() *gin.Engine {
 		{
 			user := new(controllers.UsersController)
 			userGroup.POST("/signup", user.Signup)
+			userGroup.GET("/:id", user.Show)
 		}
 	}
 	return router
