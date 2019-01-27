@@ -18,8 +18,11 @@ func (u UsersController) Signup(c *gin.Context) {
 	if err := c.ShouldBind(&userSignup); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 	} else {
-		user.Signup(userSignup)
-		c.JSON(http.StatusOK, gin.H{"message": "ok"})
+		if _, err = user.Signup(userSignup); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		} else {
+			c.JSON(http.StatusOK, gin.H{"message": "ok"})
+		}
 	}
 }
 
