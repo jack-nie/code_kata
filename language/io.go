@@ -41,7 +41,6 @@ func main() {
 	buf2.ReadFrom(r4)
 	fmt.Println(buf2.String())
 
-<<<<<<< HEAD
 	rp, wp := io.Pipe()
 	go func() {
 		fmt.Fprintf(wp, "Some text to print!")
@@ -59,7 +58,6 @@ func main() {
 		}
 		fmt.Print(n, string(bufp)+"-")
 	}
-=======
 	r5 := strings.NewReader("Hello world, gogogo!\n")
 	buf3, err := ioutil.ReadAll(r5)
 	if err != nil {
@@ -82,5 +80,4 @@ func main() {
 	}
 
 	fmt.Printf("%s", content)
->>>>>>> a9a1ac712c68fec2a043c566b38b8e37bffa9792
 }
