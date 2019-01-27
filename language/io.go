@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"io/ioutil"
 	"log"
 	"os"
 	"strings"
@@ -40,6 +41,7 @@ func main() {
 	buf2.ReadFrom(r4)
 	fmt.Println(buf2.String())
 
+<<<<<<< HEAD
 	rp, wp := io.Pipe()
 	go func() {
 		fmt.Fprintf(wp, "Some text to print!")
@@ -57,4 +59,28 @@ func main() {
 		}
 		fmt.Print(n, string(bufp)+"-")
 	}
+=======
+	r5 := strings.NewReader("Hello world, gogogo!\n")
+	buf3, err := ioutil.ReadAll(r5)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Printf("%s", buf3)
+
+	files, err := ioutil.ReadDir(".")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	for _, file := range files {
+		fmt.Println(file.Name())
+	}
+
+	content, err := ioutil.ReadFile("io.go")
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Printf("%s", content)
+>>>>>>> a9a1ac712c68fec2a043c566b38b8e37bffa9792
 }

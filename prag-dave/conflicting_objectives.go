@@ -2,8 +2,9 @@ package code_kata
 
 import (
 	"bufio"
-	"github.com/fatih/set"
 	"os"
+
+	"github.com/fatih/set"
 )
 
 func checkWords(file_path string) []string {
