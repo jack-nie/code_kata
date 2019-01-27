@@ -9,6 +9,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/jack-nie/code_kata/go-gin-boilerplate/controllers"
+	"github.com/jack-nie/code_kata/go-gin-boilerplate/middlewares"
 	"github.com/sirupsen/logrus"
 )
 
@@ -21,21 +22,21 @@ func Init() {
 
 	go func() {
 		if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
-			logrus.Fatalf("listen: %s\n", err)
+			logrus.Infof("listen: %s\n", err)
 		}
 	}()
 
 	quit := make(chan os.Signal)
 	signal.Notify(quit, os.Interrupt)
 	<-quit
-	logrus.Println("Shutdown Server ...")
+	logrus.Info("Shutdown Server ...")
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 	if err := srv.Shutdown(ctx); err != nil {
-		logrus.Fatalf("Server Shutdown: %s", err)
+		logrus.Infof("Server Shutdown: %s", err)
 	}
-	logrus.Println("Server exiting")
+	logrus.Info("Server exiting")
 }
 
 func NewRouter() *gin.Engine {
@@ -55,6 +56,16 @@ func NewRouter() *gin.Engine {
 			userGroup.POST("/signup", user.Signup)
 			userGroup.GET("/:id", user.Show)
 		}
+	}
+
+	admin := router.Group("/admin")
+	a := new(controllers.AdminController)
+	admin.POST("/", a.Create)
+	admin.POST("/login", a.Login)
+	admin.Use(middlewares.Auth("admin"))
+	{
+		post := new(controllers.PostsController)
+		admin.POST("/posts/", post.Create)
 	}
 	return router
 }

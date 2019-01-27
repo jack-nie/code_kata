@@ -52,9 +52,9 @@ func InitDatabase() {
 	db.SetLogger(&GormLogger{})
 	db.LogMode(true)
 
-	db.AutoMigrate(&User{}, &Author{}, &Category{}, &Comment{}, &Post{}, &Tag{})
+	db.AutoMigrate(&User{}, &Admin{}, &Category{}, &Comment{}, &Post{}, &Tag{})
 	db.Model(&Post{}).AddIndex("index_on_category_id", "category_id")
-	db.Model(&Post{}).AddIndex("index_on_author_id", "author_id")
+	db.Model(&Post{}).AddIndex("index_on_admin_id", "admin_id")
 	db.Model(&Comment{}).AddIndex("index_on_user_id", "user_id")
 	db.Model(&Comment{}).AddIndex("index_on_post_id", "post_id")
 }

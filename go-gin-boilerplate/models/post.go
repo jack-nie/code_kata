@@ -8,7 +8,7 @@ type Post struct {
 	Comments      []Comment
 	CategoryID    uint
 	Category      Category
-	AuthorID      uint
-	Author        Author
+	AdminID       uint
+	Admin         Admin
 	Tags          []Tag `gorm:"many2many:post_tags;"`
 }
