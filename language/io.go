@@ -39,4 +39,22 @@ func main() {
 	buf2 := new(bytes.Buffer)
 	buf2.ReadFrom(r4)
 	fmt.Println(buf2.String())
+
+	rp, wp := io.Pipe()
+	go func() {
+		fmt.Fprintf(wp, "Some text to print!")
+		wp.Close()
+	}()
+	bufp := make([]byte, 1)
+	for {
+		n, err := rp.Read(bufp)
+		if err != nil {
+			if err == io.EOF {
+				break
+			} else {
+				fmt.Println("Error: ", err)
+			}
+		}
+		fmt.Print(n, string(bufp)+"-")
+	}
 }
