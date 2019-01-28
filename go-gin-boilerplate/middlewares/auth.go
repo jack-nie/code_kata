@@ -12,22 +12,22 @@ func Auth(role string) gin.HandlerFunc {
 		authorization := c.Request.Header.Get("Authorization")
 		token, err := jwt.Parse(authorization, secret())
 		if err != nil {
-			logrus.Fatalf("error while parsing token: %v", err)
+			logrus.Info("error while parsing token: %v", err)
 			c.AbortWithStatus(400)
 		}
 		claim, ok := token.Claims.(jwt.MapClaims)
 		if !ok {
-			logrus.Fatalf("error while convert claim to mapclaim")
+			logrus.Info("error while convert claim to mapclaim")
 			c.AbortWithStatus(400)
 		}
 
 		if !token.Valid {
-			logrus.Fatalf("token is unvalid")
+			logrus.Info("token is unvalid")
 			c.AbortWithStatus(401)
 		} else {
 			if role == "admin" {
 				if adminID, ok := claim["AdminID"]; !ok {
-					logrus.Fatalf("not valid admin")
+					logrus.Info("not valid admin")
 					c.AbortWithStatus(401)
 				} else {
 					c.Set("AdminID", adminID)
@@ -36,7 +36,7 @@ func Auth(role string) gin.HandlerFunc {
 
 			if role == "user" {
 				if userID, ok := claim["UserID"]; !ok {
-					logrus.Fatalf("not valid user")
+					logrus.Info("not valid user")
 					c.AbortWithStatus(401)
 				} else {
 					c.Set("UserID", userID)
