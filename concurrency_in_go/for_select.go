@@ -36,24 +36,31 @@ func main() {
 	<-terminated
 	fmt.Println("Done.")
 
-	newRandStream := func() <-chan int {
+	newRandStream := func(done <-chan interface{}) <-chan int {
 		randStream := make(chan int)
 
 		go func() {
 			defer fmt.Println("new reandStream closure exited.\n")
 			defer close(randStream)
 			for {
-				randStream <- rand.Int()
+				select {
+				case randStream <- rand.Int():
+				case <-done:
+					return
+				}
 			}
 		}()
 		return randStream
 	}
 
 
-	randStream := newRandStream()
+	done = make(chan interface{})
+	randStream := newRandStream(done)
 	fmt.Println("3 random ints:")
 
 	for i := 1; i <= 3; i++ {
 		fmt.Printf("%d: %d\n", i, <-randStream)
 	}
+	close(done)
+	time.Sleep(1 * time.Second)
 }
