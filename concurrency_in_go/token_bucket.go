@@ -35,7 +35,7 @@ func main() {
 			if err != nil {
 				log.Printf("can not read file: %s", err)
 			}
-	    log.Println("ReadFile")
+			log.Println("ReadFile")
 		}()
 	}
 
@@ -46,7 +46,7 @@ func main() {
 			if err != nil {
 				log.Printf("resolve address failed: %s", err)
 			}
-	    log.Println("ResolveAddress")
+			log.Println("ResolveAddress")
 		}()
 	}
 
